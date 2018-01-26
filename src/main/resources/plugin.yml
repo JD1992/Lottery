@@ -1,0 +1,9 @@
+name: deinLotto
+version: ${project.version}
+main: bz.dcr.deinlotto.DeinLotto
+author: JD1992
+depend: [Vault]
+commands:
+  dia:
+    description: Informationen über das Lotto
+    usage: /dia
