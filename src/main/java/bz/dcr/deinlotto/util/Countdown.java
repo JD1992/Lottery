@@ -15,28 +15,28 @@ import java.util.Random;
  */
 public class Countdown implements Runnable {
 	
-	private final DeinLotto INSTANCE;
+	private final DeinLotto plugin;
 	
 	private int counter;
 	
-	private String TIMLEFT;
+	private String timeleft ;
 	
 	public Countdown ( DeinLotto plugin, int period ) {
-		this.INSTANCE = plugin;
+		this.plugin = plugin;
 		this.counter = period * 60;
 		
-		this.TIMLEFT = plugin.CONFIG.getString( "message.broadcast.text" ) + ": " +
-		               plugin.CONFIG.getString( "message.broadcast.value" );
+		this.timeleft = plugin.getConfiguration().getString( "message.broadcast.text" ) + ": " +
+		                plugin.getConfiguration().getString( "message.broadcast.value" );
 		
-		this.INSTANCE.inRound = true;
+		this.plugin.setInRound( true );
 		this.run();
 	}
 	
 	@Override
 	public void run () {
-		if ( ! INSTANCE.inRound ) { return; }
-		if ( counter == INSTANCE.CONFIG.getInt( "plugin.timingInMinutes.rounds" ) * 60 ) {
-			INSTANCE.sendConfigPluginBroadcast( INSTANCE.CONFIG.getString( "message.round.start" ) );
+		if ( ! this.plugin.isInRound() ) { return; }
+		if ( counter == this.plugin.getConfiguration().getInt( "plugin.timingInMinutes.rounds" ) * 60 ) {
+			this.plugin.sendConfigPluginBroadcast( this.plugin.getConfiguration().getString( "message.round.start" ) );
 		}
 		if ( counter >= 60 ) {
 			switch ( counter ) {
@@ -47,11 +47,11 @@ public class Countdown implements Runnable {
 				case 900:
 				case 1200:
 				case 1800:
-					INSTANCE.sendPluginBroadcast( TIMLEFT + ( counter / 60 ) + " Minute(n)" );
+					this.plugin.sendPluginBroadcast( timeleft + ( counter / 60 ) + " Minute(n)" );
 					break;
 			}
 			counter--;
-			Bukkit.getScheduler().runTaskLater( INSTANCE, this, 20 );
+			Bukkit.getScheduler().runTaskLater( this.plugin, this, 20 );
 			return;
 		}
 		
@@ -61,18 +61,18 @@ public class Countdown implements Runnable {
 				case 5:
 				case 10:
 				case 30:
-					INSTANCE.sendPluginBroadcast( TIMLEFT + ( counter ) + " Sekunde(n)" );
+					this.plugin.sendPluginBroadcast( timeleft + ( counter ) + " Sekunde(n)" );
 					break;
 			}
 			counter--;
-			Bukkit.getScheduler().runTaskLater( INSTANCE, this, 20 );
+			Bukkit.getScheduler().runTaskLater( this.plugin, this, 20 );
 			return;
 		}
 		
-		if ( INSTANCE.participation.size() >= INSTANCE.CONFIG.getInt( "plugin.participation.minimumPlayersPerRound" ) ) {
+		if ( this.plugin.getParticipations().size() >= this.plugin.getConfiguration().getInt( "plugin.participation.minimumPlayersPerRound" ) ) {
 			Random rnd = new Random();
 			ArrayList < Player > possibleWinners = new ArrayList <>();
-			for ( Map.Entry < Player, Integer > entry : INSTANCE.participation.entrySet() ) {
+			for ( Map.Entry < Player, Integer > entry : this.plugin.getParticipations().entrySet() ) {
 				Player player = entry.getKey();
 				int entries = entry.getValue();
 				while ( entries >= 0 ) {
@@ -81,33 +81,33 @@ public class Countdown implements Runnable {
 				}
 			}
 			Player winner = possibleWinners.get( rnd.nextInt( possibleWinners.size() - 1 ) );
-			Bukkit.getScheduler().runTaskLater( INSTANCE, () -> {
-				Material mat = Material.getMaterial( INSTANCE.CONFIG.getString( "plugin.price.material" ) );
-				ItemStack winnerItem = new ItemStack( mat, INSTANCE.CONFIG.getInt( "plugin.price.count" ) );
+			Bukkit.getScheduler().runTaskLater( this.plugin, () -> {
+				Material mat = Material.getMaterial( this.plugin.getConfiguration().getString( "plugin.price.material" ) );
+				ItemStack winnerItem = new ItemStack( mat, this.plugin.getConfiguration().getInt( "plugin.price.count" ) );
 				winner.getInventory().addItem( winnerItem );
-				INSTANCE.sendConfigPluginMessage( winner, "message.participation.winner" );
-				INSTANCE.sendConfigPluginBroadcast( INSTANCE.CONFIG.getString( "message.round.end.text" ) + " " +
-				                              INSTANCE.CONFIG.getString( "message.round.end.color" ) +
-				                              winner.getName() );
+				this.plugin.sendConfigPluginMessage( winner, "message.participation.winner" );
+				this.plugin.sendConfigPluginBroadcast( this.plugin.getConfiguration().getString( "message.round.end.text" ) + " " +
+				                                       this.plugin.getConfiguration().getString( "message.round.end.color" ) +
+				                                       winner.getName() );
 			}, 20 * 3L );
 		} else {
-			INSTANCE.sendConfigPluginBroadcast( INSTANCE.CONFIG.getString( "message.error.noParticipents" ) );
-			int entryMoney = INSTANCE.CONFIG.getInt( "plugin.participation.cost" );
-			for ( Map.Entry < Player, Integer > entry : INSTANCE.participation.entrySet() ) {
+			this.plugin.sendConfigPluginBroadcast( this.plugin.getConfiguration().getString( "message.error.noParticipents" ) );
+			int entryMoney = this.plugin.getConfiguration().getInt( "plugin.participation.cost" );
+			for ( Map.Entry < Player, Integer > entry : this.plugin.getParticipations().entrySet() ) {
 				Player player = entry.getKey();
 				int entries = entry.getValue();
-				INSTANCE.econ.depositPlayer( player, "Rückzahlung deinLotto", ( entries * entryMoney ) );
+				this.plugin.getEcon().depositPlayer( player, "Rückzahlung deinLotto", ( entries * entryMoney ) );
 			}
 		}
-		this.INSTANCE.inRound = false;
-		this.INSTANCE.participation.clear();
+		this.plugin.setInRound( false );
+		this.plugin.getParticipations().clear();
 		
-		Bukkit.getScheduler().runTaskLater( INSTANCE, () -> {
-			this.INSTANCE.inRound = true;
-			this.INSTANCE.participation = new HashMap <>();
-			this.counter = INSTANCE.CONFIG.getInt( "plugin.timingInMinutes.rounds" ) * 60;
+		Bukkit.getScheduler().runTaskLater( this.plugin, () -> {
+			this.plugin.setInRound( true );
+			this.plugin.setParticipations() = new HashMap <>();
+			this.counter = this.plugin.getConfiguration().getInt( "plugin.timingInMinutes.rounds" ) * 60;
 			this.run();
-		}, 20 * INSTANCE.CONFIG.getInt( "plugin.timingInMinutes.betweenRounds" ) * 60 );
+		}, 20 * this.plugin.getConfiguration().getInt( "plugin.timingInMinutes.betweenRounds" ) * 60 );
 		
 	}
 	

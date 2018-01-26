@@ -10,20 +10,20 @@ import org.bukkit.event.player.PlayerQuitEvent;
  */
 public class PlayerQuit implements Listener {
 	
-	private final DeinLotto PLUGIN;
+	private final DeinLotto plugin;
 	
 	public PlayerQuit ( DeinLotto instance ) {
-		this.PLUGIN = instance;
+		this.plugin = instance;
 	}
 	
 	@EventHandler
 	public void onPlayerQuit ( PlayerQuitEvent event ) {
 		Player player = event.getPlayer();
-		if ( PLUGIN.participation.containsKey( player ) && PLUGIN.inRound) {
-			int entryMoney = PLUGIN.CONFIG.getInt( "plugin.participation.cost" );
-			int entries = PLUGIN.participation.get( player );
-			PLUGIN.econ.depositPlayer( player, "Rückzahlung deinLotto", ( entries * entryMoney ) );
-			PLUGIN.participation.remove( player );
+		if ( this.plugin.getParticipations().containsKey( player ) && this.plugin.isInRound()) {
+			int entryMoney = this.plugin.getConfiguration().getInt( "plugin.participation.cost" );
+			int entries = this.plugin.getParticipations().get( player );
+			this.plugin.getEcon().depositPlayer( player, "Rückzahlung deinLotto", ( entries * entryMoney ) );
+			this.plugin.getParticipations().remove( player );
 		}
 	}
 	
