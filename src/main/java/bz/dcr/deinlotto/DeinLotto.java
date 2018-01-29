@@ -2,6 +2,7 @@ package bz.dcr.deinlotto;
 
 import bz.dcr.deinlotto.command.CommandDeinLotto;
 import bz.dcr.deinlotto.listener.PlayerQuit;
+import bz.dcr.deinlotto.util.Constants;
 import bz.dcr.deinlotto.util.Countdown;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,8 +20,8 @@ import java.util.StringJoiner;
 
 public final class DeinLotto extends JavaPlugin {
 	
-	private String CONSOLEPREFIX;
-	private String INGAMEPREFIX;
+	private String consoleprefix;
+	private String ingameprefix;
 	
 	private @Getter Configuration configuration;
 	private @Getter Economy econ = null;
@@ -34,13 +35,13 @@ public final class DeinLotto extends JavaPlugin {
 	public void onEnable () {
 		
 		init();
-		System.out.println( CONSOLEPREFIX + " Das Plugin wurde erfolgreich aktiviert!" );
+		System.out.println( consoleprefix + " Das Plugin wurde erfolgreich aktiviert!" );
 	}
 	
 	@Override
 	public void onDisable () {
 		
-		System.out.println( CONSOLEPREFIX + " Das Plugin wurde erfolgreich deaktiviert!" );
+		System.out.println( consoleprefix + " Das Plugin wurde erfolgreich deaktiviert!" );
 	}
 	
 	private void init () {
@@ -50,14 +51,14 @@ public final class DeinLotto extends JavaPlugin {
 		initConstants();
 		participations = new HashMap <>();
 		if ( ! setupEconomy() ) {
-			System.err.println( CONSOLEPREFIX + configuration.getString( "message.noEconomy" ) );
+			System.err.println( consoleprefix + configuration.getString( Constants.Message.Error.NO_ECONOMY ) );
 			this.onDisable();
 		}
 		initCommands();
 		initListener();
 		Bukkit.getScheduler().runTaskLater( this,
-				() -> this.setCountdown( new Countdown( this, this.configuration.getInt( "plugin.timing.round" ) ) ),
-				20 * configuration.getInt( "plugin.timing.betweenRounds" ) * 60 );
+				() -> this.setCountdown( new Countdown( this, this.configuration.getInt( Constants.Plugin.TimingInMinutes.ROUNDS ) ) ),
+				20 * configuration.getInt( Constants.Plugin.TimingInMinutes.BETWEEN_ROUNDS ) * 60 );
 		
 	}
 	
@@ -74,78 +75,80 @@ public final class DeinLotto extends JavaPlugin {
 	
 	private void initConfigPermissions () {
 		
-		configuration.addDefault( "permission.admin", "deinlotto.admin" );
-		configuration.addDefault( "permission.team", "deinlotto.team" );
+		configuration.addDefault( Constants.Permission.ADMIN, "deinlotto.admin" );
+		configuration.addDefault( Constants.Permission.TEAM, "deinlotto.team" );
 	}
 	
 	private void initConfigValues () {
 		
-		configuration.addDefault( "plugin.prefix.console", "[deinLotto]" );
-		configuration.addDefault( "plugin.prefix.ingame", "&6&o&ldeinLotto&0>" );
+		configuration.addDefault( Constants.Plugin.Prefix.CONSOLE, "[deinLotto]" );
+		configuration.addDefault( Constants.Plugin.Prefix.INGAME, "&6&o&ldeinLotto&0>" );
 		
-		configuration.addDefault( "plugin.timingInMinutes.rounds", 30 );
-		configuration.addDefault( "plugin.timingInMinutes.betweenRounds", 10 );
+		configuration.addDefault( Constants.Plugin.TimingInMinutes.ROUNDS, 30 );
+		configuration.addDefault( Constants.Plugin.TimingInMinutes.BETWEEN_ROUNDS, 10 );
 		
-		configuration.addDefault( "plugin.price.material", "DIAMOND" );
-		configuration.addDefault( "plugin.price.count", 1 );
+		configuration.addDefault( Constants.Plugin.Price.MATERIAL, "DIAMOND" );
+		configuration.addDefault( Constants.Plugin.Price.COUNT, 1 );
 		
-		configuration.addDefault( "plugin.participations.cost", 50 );
-		configuration.addDefault( "plugin.participations.currency", "DM" );
+		configuration.addDefault( Constants.Plugin.Participations.COST, 50 );
+		configuration.addDefault( Constants.Plugin.Participations.CURRENCY, "DM" );
 		
-		configuration.addDefault( "plugin.participations.minimumPlayersPerRound", 10 );
-		configuration.addDefault( "plugin.participations.maximumParticipationsPerPlayer", 5 );
+		configuration.addDefault( Constants.Plugin.Participations.MINIMUM_PLAYERS_PER_ROUND, 10 );
+		configuration.addDefault( Constants.Plugin.Participations.MAXIMUM_PARTICIPATIONS_PER_PLAYER, 5 );
 		
 	}
 	
 	private void initConstants () {
 		
-		this.CONSOLEPREFIX = configuration.getString( "plugin.prefix.console" );
-		this.INGAMEPREFIX = configuration.getString( "plugin.prefix.ingame" );
+		this.consoleprefix = configuration.getString( Constants.Plugin.Prefix.CONSOLE );
+		this.ingameprefix = configuration.getString( Constants.Plugin.Prefix.INGAME );
+		
 	}
 	
 	private void initConfigMessages () {
 		
-		configuration.addDefault( "message.error.noConsole", "Dieser befehl steht nur Ingame zur Verfügung." );
-		configuration.addDefault( "message.error.noPermission", "&eDieser Befehl existiert nicht." );
-		configuration.addDefault( "message.error.noEconomy", "Vault konnte nicht initialisiert werden." );
-		configuration.addDefault( "message.error.noMoney", "&4Du hast nicht genügend Geld." );
-		configuration.addDefault( "message.error.noParticipents", "&4Es haben zu wenige Personen beim Dia-Lotto mitgemacht!" );
-		configuration.addDefault( "message.error.noActiveRound", "&4Derzeit läuft keine Runde des Dia-Lotto." );
+		configuration.addDefault( Constants.Message.Error.GENERAL,
+				"&4Es ist ein Fehler aufgetretten, versuche es in Kürze erneut. Sollte es wieder nicht funktionieren, melde es dem Team." );
+		configuration.addDefault( Constants.Message.Error.NO_CONSOLE, "Dieser befehl steht nur Ingame zur Verfügung." );
+		configuration.addDefault( Constants.Message.Error.NO_PERMISSION, "&eDieser Befehl existiert nicht." );
+		configuration.addDefault( Constants.Message.Error.NO_ECONOMY, "Vault konnte nicht initialisiert werden." );
+		configuration.addDefault( Constants.Message.Error.NO_MONEY, "&4Du hast nicht genügend Geld." );
+		configuration.addDefault( Constants.Message.Error.NO_PARTICIPANTS, "&4Es haben zu wenige Personen beim Dia-Lotto mitgemacht!" );
+		configuration.addDefault( Constants.Message.Error.NO_ACTIVE_ROUND, "&4Derzeit läuft keine Runde des Dia-Lotto." );
+		configuration.addDefault( Constants.Message.Error.WRONG_PARAMETER, "&4Überprüfe deine Eingabe." );
 		
-		configuration.addDefault( "message.round.start", "&eEine neue Runde Dia-Lotto ist gestartet." );
-		configuration.addDefault( "message.round.end.text", "&eEinen Diamant hat gewonnen" );
-		configuration.addDefault( "message.round.end.color", "&6" );
+		configuration.addDefault( Constants.Message.Round.START, "&eEine neue Runde Dia-Lotto ist gestartet." );
+		configuration.addDefault( Constants.Message.Round.END_TEXT, "&eEinen Diamant hat gewonnen" );
+		configuration.addDefault( Constants.Message.Round.END_COLOR, "&6" );
 		
-		configuration.addDefault( "message.participations.success", "&eDu nimmst an dieser Runde des Dia-Lotto teil." );
-		configuration.addDefault( "message.participations.winner", "&eDu hast beim Dia-Lotto gewonnen. Der Gewinn wurde in dein Inventar gelegt" +
-		                                                           "." );
-		configuration.addDefault( "message.participations.reachedMax", "&eDu hast bereit die Maximale Menge an Tickets erreicht." );
+		configuration.addDefault( Constants.Message.Participations.SUCCESS, "&eDu nimmst an dieser Runde des Dia-Lotto teil." );
+		configuration.addDefault( Constants.Message.Participations.WINNER, "&eDu hast beim Dia-Lotto gewonnen. Der Gewinn wurde in dein Inventar gelegt." );
+		configuration.addDefault( Constants.Message.Participations.REACHED_MAX, "&eDu hast bereit die Maximale Menge an Tickets erreicht." );
 		
-		configuration.addDefault( "message.reload.start", "&4Das Plugin wird neugeladen." );
-		configuration.addDefault( "message.reload.end", "&4Das Plugin wurde erfolgreich neugeladen." );
-		configuration.addDefault( "message.wrongParameter", "&4Überprüfe deine Eingabe." );
+		configuration.addDefault( Constants.Message.Reload.START, "&4Das Plugin wird neugeladen." );
+		configuration.addDefault( Constants.Message.Reload.END, "&4Das Plugin wurde erfolgreich neugeladen." );
 		
-		configuration.addDefault( "message.broadcast.text", "&3Diese Runde des Dia-Lotto endet in" );
-		configuration.addDefault( "message.broadcast.value", "&f" );
+		configuration.addDefault( Constants.Message.Broadcast.TEXT, "&3Diese Runde des Dia-Lotto endet in" );
+		configuration.addDefault( Constants.Message.Broadcast.VALUE, "&f" );
 		
-		configuration.addDefault( "message.command.join.description", "&3Teilnehmen kannst du mit" );
-		configuration.addDefault( "message.command.join.text", "&e/dia join" );
+		configuration.addDefault( Constants.Message.Command.Join.DESCRIPTION, "&3Teilnehmen kannst du mit" );
+		configuration.addDefault( Constants.Message.Command.Join.TEXT, "&e/dia join" );
 		
-		configuration.addDefault( "message.command.price.description", "&3Eine Teilnahme kostet" );
-		configuration.addDefault( "message.command.price.text", "&e" );
+		configuration.addDefault( Constants.Message.Command.Price.DESCRIPTION, "&3Eine Teilnahme kostet" );
+		configuration.addDefault( Constants.Message.Command.Price.TEXT, "&e" );
 		
-		configuration.addDefault( "message.command.headline.seperatorColor", "&9" );
-		configuration.addDefault( "message.command.headline.seperatorSign", "==========" );
-		configuration.addDefault( "message.command.headline.name", "&6[Dia-Lotto]" );
+		configuration.addDefault( Constants.Message.Command.Headline.SEPERATOR_COLOR, "&9" );
+		configuration.addDefault( Constants.Message.Command.Headline.SEPERATOR_SIGN, "==========" );
+		configuration.addDefault( Constants.Message.Command.Headline.NAME, "&6[Dia-Lotto]" );
 		
-		configuration.addDefault( "message.command.infoBoard.participants.text", "&eTeilnehmende Spieler" );
-		configuration.addDefault( "message.command.infoBoard.participants.value", "&f" );
+		configuration.addDefault( Constants.Message.Command.InfoBoard.Participants.TEXT, "&eTeilnehmende Spieler" );
+		configuration.addDefault( Constants.Message.Command.InfoBoard.Participants.VALUE, "&f" );
 		
-		configuration.addDefault( "message.command.infoBoard.tickets.text", "&eGekaufte Tickets" );
-		configuration.addDefault( "message.command.infoBoard.tickets.value", "&f" );
+		configuration.addDefault( Constants.Message.Command.InfoBoard.Tickets.TEXT, "&eGekaufte Tickets" );
+		configuration.addDefault( Constants.Message.Command.InfoBoard.Tickets.VALUE, "&f" );
 		
-		configuration.addDefault( "message.command.infoBoard.timeleft.text", "&eVerbleibende Zeit" );
-		configuration.addDefault( "message.command.infoBoard.timeleft.value", "&f" );
+		configuration.addDefault( Constants.Message.Command.InfoBoard.Timeleft.TEXT, "&eVerbleibende Zeit" );
+		configuration.addDefault( Constants.Message.Command.InfoBoard.Timeleft.VALUE, "&f" );
 		
 	}
 	
@@ -165,7 +168,7 @@ public final class DeinLotto extends JavaPlugin {
 	private void initCommands () {
 		
 		this.getCommand( "dia" ).setExecutor( new CommandDeinLotto( this ) );
-		//this.getCommand( configuration.getString( "plugin.command.mainCommand" ) ).setExecutor( new CommandDeinLotto( this ) );
+		
 	}
 	
 	private void initListener () {
@@ -195,9 +198,10 @@ public final class DeinLotto extends JavaPlugin {
 	 */
 	public void reload ( CommandSender sender ) {
 		
-		this.sendPluginMessage( sender, "&4Config wird neugeladen." );
+		this.sendPluginMessage( sender, Constants.Message.Reload.START );
 		this.reloadConfig();
-		this.sendPluginMessage( sender, "&4Config wurde erfolgreich neugeladen." );
+		this.sendPluginMessage( sender, Constants.Message.Reload.END );
+		
 	}
 	
 	/**
@@ -209,6 +213,7 @@ public final class DeinLotto extends JavaPlugin {
 	public void sendConfigPluginMessage ( CommandSender sender, String node ) {
 		
 		sendPluginMessage( sender, this.getConfig().getString( node ) );
+		
 	}
 	
 	/**
@@ -223,10 +228,10 @@ public final class DeinLotto extends JavaPlugin {
 		StringJoiner joiner = new StringJoiner( " " );
 		if ( sender instanceof Player ) {
 			message = ChatColor.translateAlternateColorCodes( '&', msg );
-			joiner.add( INGAMEPREFIX );
+			joiner.add( ingameprefix );
 		} else {
 			message = ChatColor.stripColor( msg );
-			joiner.add( CONSOLEPREFIX );
+			joiner.add( consoleprefix );
 		}
 		sender.sendMessage( joiner.add( message ).toString() );
 	}

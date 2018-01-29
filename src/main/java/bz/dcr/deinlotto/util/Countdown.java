@@ -19,14 +19,14 @@ public class Countdown implements Runnable {
 	
 	private int counter;
 	
-	private String timeleft ;
+	private String timeleft;
 	
 	public Countdown ( DeinLotto plugin, int period ) {
 		this.plugin = plugin;
 		this.counter = period * 60;
 		
-		this.timeleft = plugin.getConfiguration().getString( "message.broadcast.text" ) + ": " +
-		                plugin.getConfiguration().getString( "message.broadcast.value" );
+		this.timeleft = plugin.getConfiguration().getString( Constants.Message.Broadcast.TEXT ) + ": " +
+		                plugin.getConfiguration().getString( Constants.Message.Broadcast.VALUE );
 		
 		this.plugin.setInRound( true );
 		this.run();
@@ -35,8 +35,8 @@ public class Countdown implements Runnable {
 	@Override
 	public void run () {
 		if ( ! this.plugin.isInRound() ) { return; }
-		if ( counter == this.plugin.getConfiguration().getInt( "plugin.timingInMinutes.rounds" ) * 60 ) {
-			this.plugin.sendConfigPluginBroadcast( this.plugin.getConfiguration().getString( "message.round.start" ) );
+		if ( counter == this.plugin.getConfiguration().getInt( Constants.Plugin.TimingInMinutes.ROUNDS ) * 60 ) {
+			this.plugin.sendConfigPluginBroadcast( this.plugin.getConfiguration().getString( Constants.Message.Round.START ) );
 		}
 		if ( counter >= 60 ) {
 			switch ( counter ) {
@@ -69,7 +69,7 @@ public class Countdown implements Runnable {
 			return;
 		}
 		
-		if ( this.plugin.getParticipations().size() >= this.plugin.getConfiguration().getInt( "plugin.participation.minimumPlayersPerRound" ) ) {
+		if ( this.plugin.getParticipations().size() >= this.plugin.getConfiguration().getInt( Constants.Plugin.Participations.MINIMUM_PLAYERS_PER_ROUND ) ) {
 			Random rnd = new Random();
 			ArrayList < Player > possibleWinners = new ArrayList <>();
 			for ( Map.Entry < Player, Integer > entry : this.plugin.getParticipations().entrySet() ) {
@@ -82,17 +82,17 @@ public class Countdown implements Runnable {
 			}
 			Player winner = possibleWinners.get( rnd.nextInt( possibleWinners.size() - 1 ) );
 			Bukkit.getScheduler().runTaskLater( this.plugin, () -> {
-				Material mat = Material.getMaterial( this.plugin.getConfiguration().getString( "plugin.price.material" ) );
-				ItemStack winnerItem = new ItemStack( mat, this.plugin.getConfiguration().getInt( "plugin.price.count" ) );
+				Material material = Material.getMaterial( this.plugin.getConfiguration().getString( Constants.Plugin.Price.MATERIAL ) );
+				ItemStack winnerItem = new ItemStack( material, this.plugin.getConfiguration().getInt( Constants.Plugin.Price.COUNT ) );
 				winner.getInventory().addItem( winnerItem );
-				this.plugin.sendConfigPluginMessage( winner, "message.participation.winner" );
-				this.plugin.sendConfigPluginBroadcast( this.plugin.getConfiguration().getString( "message.round.end.text" ) + " " +
-				                                       this.plugin.getConfiguration().getString( "message.round.end.color" ) +
+				this.plugin.sendConfigPluginMessage( winner, Constants.Message.Participations.WINNER );
+				this.plugin.sendConfigPluginBroadcast( this.plugin.getConfiguration().getString( Constants.Message.Round.END_TEXT ) + " " +
+				                                       this.plugin.getConfiguration().getString( Constants.Message.Round.END_COLOR ) +
 				                                       winner.getName() );
 			}, 20 * 3L );
 		} else {
-			this.plugin.sendConfigPluginBroadcast( this.plugin.getConfiguration().getString( "message.error.noParticipents" ) );
-			int entryMoney = this.plugin.getConfiguration().getInt( "plugin.participation.cost" );
+			this.plugin.sendConfigPluginBroadcast( this.plugin.getConfiguration().getString( Constants.Message.Error.NO_PARTICIPANTS ) );
+			int entryMoney = this.plugin.getConfiguration().getInt( Constants.Plugin.Participations.COST );
 			for ( Map.Entry < Player, Integer > entry : this.plugin.getParticipations().entrySet() ) {
 				Player player = entry.getKey();
 				int entries = entry.getValue();
@@ -104,10 +104,10 @@ public class Countdown implements Runnable {
 		
 		Bukkit.getScheduler().runTaskLater( this.plugin, () -> {
 			this.plugin.setInRound( true );
-			this.plugin.setParticipations() = new HashMap <>();
-			this.counter = this.plugin.getConfiguration().getInt( "plugin.timingInMinutes.rounds" ) * 60;
+			this.plugin.setParticipations(new HashMap <>());
+			this.counter = this.plugin.getConfiguration().getInt( Constants.Plugin.TimingInMinutes.ROUNDS ) * 60;
 			this.run();
-		}, 20 * this.plugin.getConfiguration().getInt( "plugin.timingInMinutes.betweenRounds" ) * 60 );
+		}, 20 * this.plugin.getConfiguration().getInt( Constants.Plugin.TimingInMinutes.BETWEEN_ROUNDS ) * 60 );
 		
 	}
 	

@@ -1,6 +1,7 @@
 package bz.dcr.deinlotto.listener;
 
 import bz.dcr.deinlotto.DeinLotto;
+import bz.dcr.deinlotto.util.Constants;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,8 +20,8 @@ public class PlayerQuit implements Listener {
 	@EventHandler
 	public void onPlayerQuit ( PlayerQuitEvent event ) {
 		Player player = event.getPlayer();
-		if ( this.plugin.getParticipations().containsKey( player ) && this.plugin.isInRound()) {
-			int entryMoney = this.plugin.getConfiguration().getInt( "plugin.participation.cost" );
+		if ( this.plugin.getParticipations().containsKey( player ) && this.plugin.isInRound() ) {
+			int entryMoney = this.plugin.getConfiguration().getInt( Constants.Plugin.Participations.COST );
 			int entries = this.plugin.getParticipations().get( player );
 			this.plugin.getEcon().depositPlayer( player, "Rückzahlung deinLotto", ( entries * entryMoney ) );
 			this.plugin.getParticipations().remove( player );

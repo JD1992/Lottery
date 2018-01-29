@@ -1,6 +1,7 @@
 package bz.dcr.deinlotto.command;
 
 import bz.dcr.deinlotto.DeinLotto;
+import bz.dcr.deinlotto.util.Constants;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -36,61 +37,56 @@ public class CommandDeinLotto implements CommandExecutor {
 	}
 	
 	private String getCost () {
-		return this.plugin.getConfiguration().getString( "message.command.price.description" ) + ": " +
-		       this.plugin.getConfiguration().getString( "message.command.price.text" ) + " " +
-		       this.plugin.getConfiguration().getString( "plugin.participation.cost" ) + " " +
-		       this.plugin.getConfiguration().getString( "plugin.participation.currency" );
+		return this.plugin.getConfiguration().getString( Constants.Message.Command.Price.DESCRIPTION ) + ": " +
+		       this.plugin.getConfiguration().getString( Constants.Message.Command.Price.TEXT ) + " " +
+		       this.plugin.getConfiguration().getString( Constants.Plugin.Participations.COST ) + " " +
+		       this.plugin.getConfiguration().getString( Constants.Plugin.Participations.CURRENCY );
 		
 	}
 	
 	private String getCommand () {
-		return this.plugin.getConfiguration().getString( "message.command.join.description" ) + ": " +
-		       this.plugin.getConfiguration().getString( "message.command.join.text" );
+		return this.plugin.getConfiguration().getString( Constants.Message.Command.Join.DESCRIPTION ) + ": " +
+		       this.plugin.getConfiguration().getString( Constants.Message.Command.Join.TEXT );
 	}
 	
 	private String getTimeLeft () {
-		return this.plugin.getConfiguration().getString( "message.command.infoBoard.timeleft.text" ) + ": " +
-		       this.plugin.getConfiguration().getString( "message.command.infoBoard.timeleft.value" );
+		return this.plugin.getConfiguration().getString( Constants.Message.Command.InfoBoard.Timeleft.TEXT ) + ": " +
+		       this.plugin.getConfiguration().getString( Constants.Message.Command.InfoBoard.Timeleft.VALUE );
 	}
 	
 	private String getTickets () {
-		return this.plugin.getConfiguration().getString( "message.command.infoBoard.tickets.text" ) + ": " +
-		       this.plugin.getConfiguration().getString( "message.command.infoBoard.tickets.value" );
+		return this.plugin.getConfiguration().getString( Constants.Message.Command.InfoBoard.Tickets.TEXT ) + ": " +
+		       this.plugin.getConfiguration().getString( Constants.Message.Command.InfoBoard.Tickets.VALUE );
 	}
 	
 	private String getParticipants () {
-		return this.plugin.getConfiguration().getString( "message.command.infoBoard.participants.text" ) + ": " +
-		       this.plugin.getConfiguration().getString( "message.command.infoBoard.participants.value" );
+		return this.plugin.getConfiguration().getString( Constants.Message.Command.InfoBoard.Participants.TEXT ) + ": " +
+		       this.plugin.getConfiguration().getString( Constants.Message.Command.InfoBoard.Participants.VALUE );
 	}
 	
 	private String getSeperation () {
 		String value = "";
-		value += this.plugin.getConfiguration().getString( "message.command.headline.seperatorColor" );
-		value += this.plugin.getConfiguration().getString( "message.command.headline.seperatorSign" );
-		value += " " + this.plugin.getConfiguration().getString( "message.command.headline.name" ) + " ";
-		value += this.plugin.getConfiguration().getString( "message.command.headline.seperatorColor" );
-		value += this.plugin.getConfiguration().getString( "message.command.headline.seperatorSign" );
+		value += this.plugin.getConfiguration().getString( Constants.Message.Command.Headline.SEPERATOR_COLOR );
+		value += this.plugin.getConfiguration().getString( Constants.Message.Command.Headline.SEPERATOR_SIGN );
+		value += " " + this.plugin.getConfiguration().getString( Constants.Message.Command.Headline.NAME ) + " ";
+		value += this.plugin.getConfiguration().getString( Constants.Message.Command.Headline.SEPERATOR_COLOR );
+		value += this.plugin.getConfiguration().getString( Constants.Message.Command.Headline.SEPERATOR_SIGN );
 		return value;
 	}
 	
 	@Override
 	public boolean onCommand ( CommandSender sender, Command command, String label, String[] args ) {
 		if ( ! ( sender instanceof Player ) ) {
-			this.plugin.sendConfigPluginMessage( sender, "message.error.noConsole" );
+			this.plugin.sendConfigPluginMessage( sender, Constants.Message.Error.NO_CONSOLE );
 			return true;
 		}
 		
 		Player player = ( Player ) sender;
 		if ( ! this.plugin.isInRound() ) {
-			this.plugin.sendConfigPluginMessage( player, "message.error.noActiveRound" );
+			this.plugin.sendConfigPluginMessage( player, Constants.Message.Error.NO_ACTIVE_ROUND );
 			return true;
 		}
 		
-		//for ( Map.Entry < Player, Integer > entry : plugin.participation.entrySet() ) {
-		//	System.out.println( "Player: " + entry.getKey() );
-		//	System.out.println( "Tickets: " + entry.getValue() );
-		//	System.out.println( "===============" );
-		//}
 		switch ( args.length ) {
 			case 0:
 				sendInfoBoard( player );
@@ -108,23 +104,23 @@ public class CommandDeinLotto implements CommandExecutor {
 	
 	private void buyTicket ( Player player ) {
 		if ( this.plugin.getParticipations().containsKey( player ) ) {
-			if ( this.plugin.getParticipations().get( player ) >= this.plugin.getConfiguration().getInt(
-					"plugin.participation.maximumParticipationsPerPlayer" ) ) {
-				this.plugin.sendConfigPluginMessage( player, "message.participation.reachedMax" );
+			if ( this.plugin.getParticipations().get( player ) >=
+			     this.plugin.getConfiguration().getInt( Constants.Plugin.Participations.MAXIMUM_PARTICIPATIONS_PER_PLAYER ) ) {
+				this.plugin.sendConfigPluginMessage( player, Constants.Message.Participations.REACHED_MAX );
 				return;
 			}
 		}
-		if ( this.plugin.getEcon().getBalance( player ) < this.plugin.getConfiguration().getInt( "plugin.participation.cost" ) ) {
-			this.plugin.sendConfigPluginMessage( player, "message.error.noMoney" );
+		if ( this.plugin.getEcon().getBalance( player ) < this.plugin.getConfiguration().getInt( Constants.Plugin.Participations.COST ) ) {
+			this.plugin.sendConfigPluginMessage( player, Constants.Message.Error.NO_MONEY );
 			return;
 		}
-		this.plugin.getEcon().withdrawPlayer( player, "Ticket für deinLotto", this.plugin.getConfiguration().getInt( "plugin.participation.cost" ) );
+		this.plugin.getEcon().withdrawPlayer( player, "Ticket für deinLotto", this.plugin.getConfiguration().getInt( Constants.Plugin.Participations.COST ) );
 		if ( this.plugin.getParticipations().containsKey( player ) ) {
 			this.plugin.getParticipations().replace( player, ( this.plugin.getParticipations().get( player ) + 1 ) );
 		} else {
 			this.plugin.getParticipations().put( player, 1 );
 		}
-		this.plugin.sendConfigPluginMessage( player, "message.participation.success" );
+		this.plugin.sendConfigPluginMessage( player, Constants.Message.Participations.SUCCESS );
 	}
 	
 	private void sendInfoBoard ( Player player ) {
