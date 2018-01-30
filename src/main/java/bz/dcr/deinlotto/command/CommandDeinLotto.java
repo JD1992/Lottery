@@ -77,13 +77,13 @@ public class CommandDeinLotto implements CommandExecutor {
 	@Override
 	public boolean onCommand ( CommandSender sender, Command command, String label, String[] args ) {
 		if ( ! ( sender instanceof Player ) ) {
-			this.plugin.sendConfigPluginMessage( sender, Constants.Message.Error.NO_CONSOLE );
+			this.plugin.getMessageHandler().sendConfigMessage( sender, Constants.Message.Error.NO_CONSOLE );
 			return true;
 		}
 		
 		Player player = ( Player ) sender;
 		if ( ! this.plugin.isInRound() ) {
-			this.plugin.sendConfigPluginMessage( player, Constants.Message.Error.NO_ACTIVE_ROUND );
+			this.plugin.getMessageHandler().sendConfigMessage( player, Constants.Message.Error.NO_ACTIVE_ROUND );
 			return true;
 		}
 		
@@ -106,12 +106,12 @@ public class CommandDeinLotto implements CommandExecutor {
 		if ( this.plugin.getParticipations().containsKey( player ) ) {
 			if ( this.plugin.getParticipations().get( player ) >=
 			     this.plugin.getConfiguration().getInt( Constants.Plugin.Participations.MAXIMUM_PARTICIPATIONS_PER_PLAYER ) ) {
-				this.plugin.sendConfigPluginMessage( player, Constants.Message.Participations.REACHED_MAX );
+				this.plugin.getMessageHandler().sendConfigMessage( player, Constants.Message.Participations.REACHED_MAX );
 				return;
 			}
 		}
 		if ( this.plugin.getEcon().getBalance( player ) < this.plugin.getConfiguration().getInt( Constants.Plugin.Participations.COST ) ) {
-			this.plugin.sendConfigPluginMessage( player, Constants.Message.Error.NO_MONEY );
+			this.plugin.getMessageHandler().sendConfigMessage( player, Constants.Message.Error.NO_MONEY );
 			return;
 		}
 		this.plugin.getEcon().withdrawPlayer( player, "Ticket für deinLotto", this.plugin.getConfiguration().getInt( Constants.Plugin.Participations.COST ) );
@@ -120,7 +120,7 @@ public class CommandDeinLotto implements CommandExecutor {
 		} else {
 			this.plugin.getParticipations().put( player, 1 );
 		}
-		this.plugin.sendConfigPluginMessage( player, Constants.Message.Participations.SUCCESS );
+		this.plugin.getMessageHandler().sendConfigMessage( player, Constants.Message.Participations.SUCCESS );
 	}
 	
 	private void sendInfoBoard ( Player player ) {

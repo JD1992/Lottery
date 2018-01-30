@@ -4,11 +4,11 @@ import bz.dcr.deinlotto.command.CommandDeinLotto;
 import bz.dcr.deinlotto.listener.PlayerQuit;
 import bz.dcr.deinlotto.util.Constants;
 import bz.dcr.deinlotto.util.Countdown;
+import bz.dcr.deinlotto.util.MessageHandler;
 import lombok.Getter;
 import lombok.Setter;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
@@ -16,7 +16,6 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
-import java.util.StringJoiner;
 
 public final class DeinLotto extends JavaPlugin {
 	
@@ -30,6 +29,7 @@ public final class DeinLotto extends JavaPlugin {
 	private @Getter @Setter boolean inRound = false;
 	
 	private @Getter @Setter Countdown countdown;
+	private @Getter MessageHandler messageHandler;
 	
 	@Override
 	public void onEnable () {
@@ -65,6 +65,8 @@ public final class DeinLotto extends JavaPlugin {
 	private void initConfig () {
 		
 		configuration.addDefault( "debug.enable", false );
+		
+		messageHandler = new MessageHandler( this );
 		
 		initConfigPermissions();
 		initConfigValues();
@@ -177,20 +179,6 @@ public final class DeinLotto extends JavaPlugin {
 		
 	}
 	
-	public void sendPluginBroadcast ( String message ) {
-		
-		for ( Player player : Bukkit.getOnlinePlayers() ) {
-			sendPluginMessage( player, message );
-		}
-	}
-	
-	public void sendConfigPluginBroadcast ( String node ) {
-		
-		for ( Player player : Bukkit.getOnlinePlayers() ) {
-			sendConfigPluginMessage( player, node );
-		}
-	}
-	
 	/**
 	 * Reload all plugin related informations and send indicator messages
 	 *
@@ -198,42 +186,9 @@ public final class DeinLotto extends JavaPlugin {
 	 */
 	public void reload ( CommandSender sender ) {
 		
-		this.sendPluginMessage( sender, Constants.Message.Reload.START );
+		this.getMessageHandler().sendConfigMessage( sender, Constants.Message.Reload.START );
 		this.reloadConfig();
-		this.sendPluginMessage( sender, Constants.Message.Reload.END );
-		
-	}
-	
-	/**
-	 * Get a message from the plugin CONFIGURATION and call the method to send a plugin related message
-	 *
-	 * @param sender CommandSender or Player which the message is going to
-	 * @param node   Path to the message in the CONFIGURATION file
-	 */
-	public void sendConfigPluginMessage ( CommandSender sender, String node ) {
-		
-		sendPluginMessage( sender, this.getConfig().getString( node ) );
-		
-	}
-	
-	/**
-	 * Send a message to the CommandSender(Player/Console) with the plugin message layout
-	 *
-	 * @param sender CommandSender or Player which the message is going to
-	 * @param msg    The message that will be send
-	 */
-	private void sendPluginMessage ( CommandSender sender, String msg ) {
-		
-		String message;
-		StringJoiner joiner = new StringJoiner( " " );
-		if ( sender instanceof Player ) {
-			message = ChatColor.translateAlternateColorCodes( '&', msg );
-			joiner.add( ingameprefix );
-		} else {
-			message = ChatColor.stripColor( msg );
-			joiner.add( consoleprefix );
-		}
-		sender.sendMessage( joiner.add( message ).toString() );
+		this.getMessageHandler().sendConfigMessage( sender, Constants.Message.Reload.END );
 	}
 	
 }
