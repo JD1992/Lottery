@@ -25,8 +25,8 @@ public class Countdown implements Runnable {
 		this.plugin = plugin;
 		this.counter = period * 60;
 		
-		this.timeleft = plugin.getConfiguration().getString( Constants.Message.Broadcast.TEXT ) + ": " +
-		                plugin.getConfiguration().getString( Constants.Message.Broadcast.VALUE );
+		this.timeleft = plugin.getConfigHandler().getConfigString( Constants.Message.Broadcast.TEXT ) + ": " +
+		                plugin.getConfigHandler().getConfigString( Constants.Message.Broadcast.VALUE );
 		
 		this.plugin.setInRound( true );
 		this.run();
@@ -35,7 +35,7 @@ public class Countdown implements Runnable {
 	@Override
 	public void run () {
 		if ( ! this.plugin.isInRound() ) { return; }
-		if ( counter == this.plugin.getConfiguration().getInt( Constants.Plugin.TimingInMinutes.ROUNDS ) * 60 ) {
+		if ( counter == this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.TimingInMinutes.ROUNDS ) * 60 ) {
 			this.plugin.getMessageHandler().sendConfigMessage( Constants.Message.Round.START );
 		}
 		if ( counter >= 60 ) {
@@ -69,7 +69,7 @@ public class Countdown implements Runnable {
 			return;
 		}
 		
-		if ( this.plugin.getParticipations().size() >= this.plugin.getConfiguration().getInt( Constants.Plugin.Participations.MINIMUM_PLAYERS_PER_ROUND ) ) {
+		if ( this.plugin.getParticipations().size() >= this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.Participations.MINIMUM_PLAYERS_PER_ROUND ) ) {
 			Random rnd = new Random();
 			ArrayList < Player > possibleWinners = new ArrayList <>();
 			for ( Map.Entry < Player, Integer > entry : this.plugin.getParticipations().entrySet() ) {
@@ -82,17 +82,17 @@ public class Countdown implements Runnable {
 			}
 			Player winner = possibleWinners.get( rnd.nextInt( possibleWinners.size() - 1 ) );
 			Bukkit.getScheduler().runTaskLater( this.plugin, () -> {
-				Material material = Material.getMaterial( this.plugin.getConfiguration().getString( Constants.Plugin.Price.MATERIAL ) );
-				ItemStack winnerItem = new ItemStack( material, this.plugin.getConfiguration().getInt( Constants.Plugin.Price.COUNT ) );
+				Material material = Material.getMaterial( this.plugin.getConfigHandler().getConfigString( Constants.Plugin.Price.MATERIAL ) );
+				ItemStack winnerItem = new ItemStack( material, this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.Price.COUNT ) );
 				winner.getInventory().addItem( winnerItem );
 				this.plugin.getMessageHandler().sendConfigMessage( winner, Constants.Message.Participations.WINNER );
-				this.plugin.getMessageHandler().sendPluginMessage( this.plugin.getConfiguration().getString( Constants.Message.Round.END_TEXT ) + " " +
-				                                                   this.plugin.getConfiguration().getString( Constants.Message.Round.END_COLOR ) +
+				this.plugin.getMessageHandler().sendPluginMessage( this.plugin.getConfigHandler().getConfigString( Constants.Message.Round.END_TEXT ) + " " +
+				                                                   this.plugin.getConfigHandler().getConfigString( Constants.Message.Round.END_COLOR ) +
 				                                                   winner.getName() );
 			}, 20 * 3L );
 		} else {
 			this.plugin.getMessageHandler().sendConfigMessage( Constants.Message.Error.NO_PARTICIPANTS );
-			int entryMoney = this.plugin.getConfiguration().getInt( Constants.Plugin.Participations.COST );
+			int entryMoney = this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.Participations.COST );
 			for ( Map.Entry < Player, Integer > entry : this.plugin.getParticipations().entrySet() ) {
 				Player player = entry.getKey();
 				int entries = entry.getValue();
@@ -105,9 +105,9 @@ public class Countdown implements Runnable {
 		Bukkit.getScheduler().runTaskLater( this.plugin, () -> {
 			this.plugin.setInRound( true );
 			this.plugin.setParticipations( new HashMap <>() );
-			this.counter = this.plugin.getConfiguration().getInt( Constants.Plugin.TimingInMinutes.ROUNDS ) * 60;
+			this.counter = this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.TimingInMinutes.ROUNDS ) * 60;
 			this.run();
-		}, 20 * this.plugin.getConfiguration().getInt( Constants.Plugin.TimingInMinutes.BETWEEN_ROUNDS ) * 60 );
+		}, 20 * this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.TimingInMinutes.BETWEEN_ROUNDS ) * 60 );
 		
 	}
 	

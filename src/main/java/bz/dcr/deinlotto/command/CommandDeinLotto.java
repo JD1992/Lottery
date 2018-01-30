@@ -37,40 +37,40 @@ public class CommandDeinLotto implements CommandExecutor {
 	}
 	
 	private String getCost () {
-		return this.plugin.getConfiguration().getString( Constants.Message.Command.Price.DESCRIPTION ) + ": " +
-		       this.plugin.getConfiguration().getString( Constants.Message.Command.Price.TEXT ) + " " +
-		       this.plugin.getConfiguration().getString( Constants.Plugin.Participations.COST ) + " " +
-		       this.plugin.getConfiguration().getString( Constants.Plugin.Participations.CURRENCY );
+		return this.plugin.getConfigHandler().getConfigString( Constants.Message.Command.Price.DESCRIPTION ) + ": " +
+		       this.plugin.getConfigHandler().getConfigString(Constants.Message.Command.Price.TEXT ) + " " +
+		       this.plugin.getConfigHandler().getConfigString(Constants.Plugin.Participations.COST ) + " " +
+		       this.plugin.getConfigHandler().getConfigString(Constants.Plugin.Participations.CURRENCY );
 		
 	}
 	
 	private String getCommand () {
-		return this.plugin.getConfiguration().getString( Constants.Message.Command.Join.DESCRIPTION ) + ": " +
-		       this.plugin.getConfiguration().getString( Constants.Message.Command.Join.TEXT );
+		return this.plugin.getConfigHandler().getConfigString(Constants.Message.Command.Join.DESCRIPTION ) + ": " +
+		       this.plugin.getConfigHandler().getConfigString(Constants.Message.Command.Join.TEXT );
 	}
 	
 	private String getTimeLeft () {
-		return this.plugin.getConfiguration().getString( Constants.Message.Command.InfoBoard.Timeleft.TEXT ) + ": " +
-		       this.plugin.getConfiguration().getString( Constants.Message.Command.InfoBoard.Timeleft.VALUE );
+		return this.plugin.getConfigHandler().getConfigString(Constants.Message.Command.InfoBoard.Timeleft.TEXT ) + ": " +
+		       this.plugin.getConfigHandler().getConfigString(Constants.Message.Command.InfoBoard.Timeleft.VALUE );
 	}
 	
 	private String getTickets () {
-		return this.plugin.getConfiguration().getString( Constants.Message.Command.InfoBoard.Tickets.TEXT ) + ": " +
-		       this.plugin.getConfiguration().getString( Constants.Message.Command.InfoBoard.Tickets.VALUE );
+		return this.plugin.getConfigHandler().getConfigString(Constants.Message.Command.InfoBoard.Tickets.TEXT ) + ": " +
+		       this.plugin.getConfigHandler().getConfigString(Constants.Message.Command.InfoBoard.Tickets.VALUE );
 	}
 	
 	private String getParticipants () {
-		return this.plugin.getConfiguration().getString( Constants.Message.Command.InfoBoard.Participants.TEXT ) + ": " +
-		       this.plugin.getConfiguration().getString( Constants.Message.Command.InfoBoard.Participants.VALUE );
+		return this.plugin.getConfigHandler().getConfigString(Constants.Message.Command.InfoBoard.Participants.TEXT ) + ": " +
+		       this.plugin.getConfigHandler().getConfigString(Constants.Message.Command.InfoBoard.Participants.VALUE );
 	}
 	
 	private String getSeperation () {
 		String value = "";
-		value += this.plugin.getConfiguration().getString( Constants.Message.Command.Headline.SEPERATOR_COLOR );
-		value += this.plugin.getConfiguration().getString( Constants.Message.Command.Headline.SEPERATOR_SIGN );
-		value += " " + this.plugin.getConfiguration().getString( Constants.Message.Command.Headline.NAME ) + " ";
-		value += this.plugin.getConfiguration().getString( Constants.Message.Command.Headline.SEPERATOR_COLOR );
-		value += this.plugin.getConfiguration().getString( Constants.Message.Command.Headline.SEPERATOR_SIGN );
+		value += this.plugin.getConfigHandler().getConfigString(Constants.Message.Command.Headline.SEPERATOR_COLOR );
+		value += this.plugin.getConfigHandler().getConfigString(Constants.Message.Command.Headline.SEPERATOR_SIGN );
+		value += " " + this.plugin.getConfigHandler().getConfigString(Constants.Message.Command.Headline.NAME ) + " ";
+		value += this.plugin.getConfigHandler().getConfigString(Constants.Message.Command.Headline.SEPERATOR_COLOR );
+		value += this.plugin.getConfigHandler().getConfigString(Constants.Message.Command.Headline.SEPERATOR_SIGN );
 		return value;
 	}
 	
@@ -105,16 +105,16 @@ public class CommandDeinLotto implements CommandExecutor {
 	private void buyTicket ( Player player ) {
 		if ( this.plugin.getParticipations().containsKey( player ) ) {
 			if ( this.plugin.getParticipations().get( player ) >=
-			     this.plugin.getConfiguration().getInt( Constants.Plugin.Participations.MAXIMUM_PARTICIPATIONS_PER_PLAYER ) ) {
+			     this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.Participations.MAXIMUM_PARTICIPATIONS_PER_PLAYER ) ) {
 				this.plugin.getMessageHandler().sendConfigMessage( player, Constants.Message.Participations.REACHED_MAX );
 				return;
 			}
 		}
-		if ( this.plugin.getEcon().getBalance( player ) < this.plugin.getConfiguration().getInt( Constants.Plugin.Participations.COST ) ) {
+		if ( this.plugin.getEcon().getBalance( player ) < this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.Participations.COST ) ) {
 			this.plugin.getMessageHandler().sendConfigMessage( player, Constants.Message.Error.NO_MONEY );
 			return;
 		}
-		this.plugin.getEcon().withdrawPlayer( player, "Ticket für deinLotto", this.plugin.getConfiguration().getInt( Constants.Plugin.Participations.COST ) );
+		this.plugin.getEcon().withdrawPlayer( player, "Ticket für deinLotto", this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.Participations.COST ) );
 		if ( this.plugin.getParticipations().containsKey( player ) ) {
 			this.plugin.getParticipations().replace( player, ( this.plugin.getParticipations().get( player ) + 1 ) );
 		} else {

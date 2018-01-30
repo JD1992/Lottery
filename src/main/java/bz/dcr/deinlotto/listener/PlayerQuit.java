@@ -21,7 +21,7 @@ public class PlayerQuit implements Listener {
 	public void onPlayerQuit ( PlayerQuitEvent event ) {
 		Player player = event.getPlayer();
 		if ( this.plugin.getParticipations().containsKey( player ) && this.plugin.isInRound() ) {
-			int entryMoney = this.plugin.getConfiguration().getInt( Constants.Plugin.Participations.COST );
+			int entryMoney = this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.Participations.COST );
 			int entries = this.plugin.getParticipations().get( player );
 			this.plugin.getEcon().depositPlayer( player, "Rückzahlung deinLotto", ( entries * entryMoney ) );
 			this.plugin.getParticipations().remove( player );
