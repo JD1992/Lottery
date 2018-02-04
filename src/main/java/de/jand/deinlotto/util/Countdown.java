@@ -48,23 +48,25 @@ public class Countdown implements Runnable {
 		if ( this.counter == this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.TimingInMinutes.ROUNDS ) * 60 ) {
 			this.plugin.getMessageHandler().sendConfigMessage( Constants.Message.Round.START );
 			// Decrease the counter and run the counter with a delay
-			counter--;
+			counter -= 60;
 			Bukkit.getScheduler().runTaskLater( this.plugin, this, 20L * 60L );
 			return;
 		}
-		
+	
 		// Behavior if the counter is higher than 60 secounds
 		if ( counter >= 60 ) {
 			// Send status messages with the time left in round at specified points
 			switch ( counter ) {
 				case 60:
+					this.plugin.getMessageHandler().sendPluginMessage( "1 Minute" );
+					break;
 				case 120:
 				case 300:
 				case 600:
 				case 900:
 				case 1200:
 				case 1800:
-					this.plugin.getMessageHandler().sendPluginMessage( timeleft + ( counter / 60 ) + " Minute(n)" );
+					this.plugin.getMessageHandler().sendPluginMessage( timeleft + ( counter / 60 ) + " Minuten" );
 					break;
 				default:
 			}
@@ -78,7 +80,10 @@ public class Countdown implements Runnable {
 		else if ( counter > 0 ) {
 			// Send status messages with the time left in round at specified points
 			switch ( counter ) {
+				case 1:
 				case 2:
+				case 3:
+				case 4:
 				case 5:
 				case 10:
 				case 30:
@@ -96,7 +101,7 @@ public class Countdown implements Runnable {
 		this.plugin.setInRound( false );
 		
 		// Enough participants
-		if ( this.plugin.getParticipations().size() >= this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.Participations.MINIMUM_PLAYERS_PER_ROUND ) ) {
+		if ( this.plugin.getParticipations().size() >= this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.Participation.MINIMUM_PLAYERS_PER_ROUND ) ) {
 			
 			// Put the participants in a new list based on how many tickets they bought(5 Tickets = 5 Entries in the list)
 			ArrayList < Player > possibleWinners = new ArrayList <>();
@@ -113,15 +118,16 @@ public class Countdown implements Runnable {
 			Random rnd = new Random();
 			Player winner = possibleWinners.get( rnd.nextInt( possibleWinners.size() ) );
 			
+			this.plugin.getMessageHandler().sendConfigMessage( Constants.Message.Round.DRAW );
 			// Construct the price, give it to the player and announce the winner(broadcast)
 			Bukkit.getScheduler().runTaskLater( this.plugin, () -> {
 				Material material = Material.getMaterial( this.plugin.getConfigHandler().getConfigString( Constants.Plugin.Price.MATERIAL ) );
 				ItemStack winnerItem = new ItemStack( material, this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.Price.COUNT ) );
 				winner.getInventory().addItem( winnerItem );
-				this.plugin.getMessageHandler().sendConfigMessage( winner, Constants.Message.Participations.WINNER );
 				this.plugin.getMessageHandler().sendPluginMessage( this.plugin.getConfigHandler().getConfigString( Constants.Message.Round.END_TEXT )
 				                                                   + " " + this.plugin.getConfigHandler().getConfigString( Constants.Message.Round.END_COLOR )
 				                                                   + winner.getName() );
+				this.plugin.getMessageHandler().sendConfigMessage( winner, Constants.Message.Participation.WINNER );
 			}, 20L * 3L );
 			
 			// Not enough participants
@@ -130,7 +136,7 @@ public class Countdown implements Runnable {
 			this.plugin.getMessageHandler().sendConfigMessage( Constants.Message.Error.NO_PARTICIPANTS );
 			
 			// Get the actual paricipation costs and refund the participants
-			int entryMoney = this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.Participations.COST );
+			int entryMoney = this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.Participation.COST );
 			for ( Map.Entry < Player, Integer > entry : this.plugin.getParticipations().entrySet() ) {
 				Player player = entry.getKey();
 				int entries = entry.getValue();

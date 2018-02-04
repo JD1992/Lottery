@@ -44,8 +44,8 @@ public final class DeinLotto extends JavaPlugin {
 	 */
 	private void init () {
 		
-		messageHandler = new MessageHandler( this );
 		configHandler = new ConfigHandler( this );
+		messageHandler = new MessageHandler( this );
 		
 		participations = new HashMap <>();
 		setupEconomy();

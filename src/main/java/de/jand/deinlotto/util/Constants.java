@@ -61,16 +61,16 @@ public final class Constants {
 			
 		}
 		
-		public final class Participations {
+		public final class Participation {
 			
-			private Participations () {
+			private Participation () {
 				throw new IllegalStateException( STATE_WARNING );
 			}
 			
-			public static final String COST = "plugin.participations.cost";
-			public static final String CURRENCY = "plugin.participations.currency";
-			public static final String MINIMUM_PLAYERS_PER_ROUND = "plugin.participations.minimumPlayersPerRound";
-			public static final String MAXIMUM_PARTICIPATIONS_PER_PLAYER = "plugin.participations.maximumParticipationsPerPlayer";
+			public static final String COST = "plugin.participation.cost";
+			public static final String CURRENCY = "plugin.participation.currency";
+			public static final String MINIMUM_PLAYERS_PER_ROUND = "plugin.participation.minimumPlayersPerRound";
+			public static final String MAXIMUM_PARTICIPATIONS_PER_PLAYER = "plugin.participation.maximumParticipationsPerPlayer";
 			
 		}
 	}
@@ -108,18 +108,19 @@ public final class Constants {
 			public static final String START = "message.round.start";
 			public static final String END_TEXT = "message.round.end.text";
 			public static final String END_COLOR = "message.round.end.color";
+			public static final String DRAW = "message.round.draw";
 			
 		}
 		
-		public final class Participations {
+		public final class Participation {
 			
-			private Participations () {
+			private Participation () {
 				throw new IllegalStateException( STATE_WARNING );
 			}
 			
-			public static final String SUCCESS = "message.participations.success";
-			public static final String WINNER = "message.participations.winner";
-			public static final String REACHED_MAX = "message.participations.reachedMax";
+			public static final String SUCCESS = "message.participation.success";
+			public static final String WINNER = "message.participation.winner";
+			public static final String REACHED_MAX = "message.participation.reachedMax";
 			
 		}
 		

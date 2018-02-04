@@ -49,8 +49,8 @@ public class CommandDeinLotto implements CommandExecutor {
 	private String getCost () {
 		return this.plugin.getConfigHandler().getConfigString( Constants.Message.Command.Price.DESCRIPTION )
 		       + ": " + this.plugin.getConfigHandler().getConfigString( Constants.Message.Command.Price.TEXT )
-		       + " " + this.plugin.getConfigHandler().getConfigString( Constants.Plugin.Participations.COST )
-		       + " " + this.plugin.getConfigHandler().getConfigString( Constants.Plugin.Participations.CURRENCY );
+		       + " " + this.plugin.getConfigHandler().getConfigString( Constants.Plugin.Participation.COST )
+		       + " " + this.plugin.getConfigHandler().getConfigString( Constants.Plugin.Participation.CURRENCY );
 		
 	}
 	
@@ -102,7 +102,7 @@ public class CommandDeinLotto implements CommandExecutor {
 	private String getSeperation () {
 		return this.plugin.getConfigHandler().getConfigString( Constants.Message.Command.Headline.SEPERATOR_COLOR )
 		       + this.plugin.getConfigHandler().getConfigString( Constants.Message.Command.Headline.SEPERATOR_SIGN )
-		       + this.plugin.getConfigHandler().getConfigString( Constants.Message.Command.Headline.NAME )
+		       + " " + this.plugin.getConfigHandler().getConfigString( Constants.Message.Command.Headline.NAME )
 		       + " " + this.plugin.getConfigHandler().getConfigString( Constants.Message.Command.Headline.SEPERATOR_COLOR )
 		       + this.plugin.getConfigHandler().getConfigString( Constants.Message.Command.Headline.SEPERATOR_SIGN );
 	}
@@ -143,18 +143,18 @@ public class CommandDeinLotto implements CommandExecutor {
 		// Check if player participated before and reched the max participation number
 		if ( this.plugin.getParticipations().containsKey( player ) ) {
 			if ( this.plugin.getParticipations().get( player )
-			     >= this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.Participations.MAXIMUM_PARTICIPATIONS_PER_PLAYER ) ) {
-				this.plugin.getMessageHandler().sendConfigMessage( player, Constants.Message.Participations.REACHED_MAX );
+			     >= this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.Participation.MAXIMUM_PARTICIPATIONS_PER_PLAYER ) ) {
+				this.plugin.getMessageHandler().sendConfigMessage( player, Constants.Message.Participation.REACHED_MAX );
 				return;
 			}
 		}
 		
 		// Check if the player has enough money for a ticket and withdraw it
-		if ( this.plugin.getEcon().getBalance( player ) < this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.Participations.COST ) ) {
+		if ( this.plugin.getEcon().getBalance( player ) < this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.Participation.COST ) ) {
 			this.plugin.getMessageHandler().sendConfigMessage( player, Constants.Message.Error.NO_MONEY );
 			return;
 		}
-		this.plugin.getEcon().withdrawPlayer( player, "Ticket für deinLotto", this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.Participations.COST ) );
+		this.plugin.getEcon().withdrawPlayer( player, "Ticket für deinLotto", this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.Participation.COST ) );
 		
 		// Increase the participation count for the player
 		if ( this.plugin.getParticipations().containsKey( player ) ) {
@@ -164,7 +164,7 @@ public class CommandDeinLotto implements CommandExecutor {
 		}
 		
 		// Announce a successful participation
-		this.plugin.getMessageHandler().sendConfigMessage( player, Constants.Message.Participations.SUCCESS );
+		this.plugin.getMessageHandler().sendConfigMessage( player, Constants.Message.Participation.SUCCESS );
 		
 	}
 	

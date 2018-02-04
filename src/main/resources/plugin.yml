@@ -1,6 +1,6 @@
 name: deinLotto
 version: ${project.version}
-main: bz.dcr.deinlotto.DeinLotto
+main: de.jand.deinlotto.DeinLotto
 author: JD1992
 depend: [Vault]
 commands:

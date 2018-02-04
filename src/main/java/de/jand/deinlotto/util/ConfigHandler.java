@@ -51,11 +51,11 @@ public class ConfigHandler {
 		this.config.addDefault( Constants.Plugin.Price.MATERIAL, "DIAMOND" );
 		this.config.addDefault( Constants.Plugin.Price.COUNT, 1 );
 		
-		this.config.addDefault( Constants.Plugin.Participations.COST, 50 );
-		this.config.addDefault( Constants.Plugin.Participations.CURRENCY, "DM" );
+		this.config.addDefault( Constants.Plugin.Participation.COST, 50 );
+		this.config.addDefault( Constants.Plugin.Participation.CURRENCY, "DM" );
 		
-		this.config.addDefault( Constants.Plugin.Participations.MINIMUM_PLAYERS_PER_ROUND, 10 );
-		this.config.addDefault( Constants.Plugin.Participations.MAXIMUM_PARTICIPATIONS_PER_PLAYER, 5 );
+		this.config.addDefault( Constants.Plugin.Participation.MINIMUM_PLAYERS_PER_ROUND, 10 );
+		this.config.addDefault( Constants.Plugin.Participation.MAXIMUM_PARTICIPATIONS_PER_PLAYER, 5 );
 		
 	}
 	
@@ -78,10 +78,11 @@ public class ConfigHandler {
 		this.config.addDefault( Constants.Message.Round.START, "&eEine neue Runde Dia-Lotto ist gestartet." );
 		this.config.addDefault( Constants.Message.Round.END_TEXT, "&eEinen Diamant hat gewonnen" );
 		this.config.addDefault( Constants.Message.Round.END_COLOR, "&6" );
+		this.config.addDefault( Constants.Message.Round.DRAW, "&eDiese Runde des Dia-Lotto wurde beendet, ein Gewinner wird gerade ermittelt." );
 		
-		this.config.addDefault( Constants.Message.Participations.SUCCESS, "&eDu nimmst an dieser Runde des Dia-Lotto teil." );
-		this.config.addDefault( Constants.Message.Participations.WINNER, "&eDu hast beim Dia-Lotto gewonnen. Der Gewinn wurde in dein Inventar gelegt." );
-		this.config.addDefault( Constants.Message.Participations.REACHED_MAX, "&eDu hast bereit die Maximale Menge an Tickets erreicht." );
+		this.config.addDefault( Constants.Message.Participation.SUCCESS, "&eDu nimmst an dieser Runde des Dia-Lotto teil." );
+		this.config.addDefault( Constants.Message.Participation.WINNER, "&eDu hast beim Dia-Lotto gewonnen. Der Gewinn wurde in dein Inventar gelegt." );
+		this.config.addDefault( Constants.Message.Participation.REACHED_MAX, "&eDu hast bereit die Maximale Menge an Tickets erreicht." );
 		
 		this.config.addDefault( Constants.Message.Reload.START, "&4Das Plugin wird neugeladen." );
 		this.config.addDefault( Constants.Message.Reload.END, "&4Das Plugin wurde erfolgreich neugeladen." );
