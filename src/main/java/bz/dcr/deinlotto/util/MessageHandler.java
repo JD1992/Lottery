@@ -14,6 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @author Jan Dietze
  * @version 1.0
  */
+
 public class MessageHandler {
 	
 	private final JavaPlugin plugin;
@@ -26,10 +27,12 @@ public class MessageHandler {
 	 * @param plugin The plugin which is using this handler
 	 */
 	public MessageHandler ( JavaPlugin plugin ) {
+		
 		this.plugin = plugin;
 		
 		this.consolePrefix = ChatColor.translateAlternateColorCodes( '&', this.plugin.getConfig().getString( Constants.Plugin.Prefix.CONSOLE ) ) + " ";
 		this.ingamePrefix = ChatColor.translateAlternateColorCodes( '&', this.plugin.getConfig().getString( Constants.Plugin.Prefix.INGAME ) ) + " ";
+		
 	}
 	
 	/**

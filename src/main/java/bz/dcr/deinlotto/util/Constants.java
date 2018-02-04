@@ -2,7 +2,11 @@ package bz.dcr.deinlotto.util;
 
 /**
  * This class contains every constant value, config nodes and permissions
+ *
+ * @author Jan Dietze
+ * @version 1.0
  */
+
 public final class Constants {
 	
 	private static final String STATE_WARNING = "Utility class!";
@@ -19,6 +23,10 @@ public final class Constants {
 	}
 	
 	public final class Plugin {
+		
+		private Plugin () {
+			throw new IllegalStateException( STATE_WARNING );
+		}
 		
 		public final class Prefix {
 			
@@ -68,6 +76,10 @@ public final class Constants {
 	}
 	
 	public final class Message {
+		
+		private Message () {
+			throw new IllegalStateException( STATE_WARNING );
+		}
 		
 		public final class Error {
 			
@@ -143,7 +155,6 @@ public final class Constants {
 				
 				private Join () {
 					throw new IllegalStateException( STATE_WARNING );
-					
 				}
 				
 				public static final String DESCRIPTION = "message.command.join.description";
@@ -155,7 +166,6 @@ public final class Constants {
 				
 				private Price () {
 					throw new IllegalStateException( STATE_WARNING );
-					
 				}
 				
 				public static final String DESCRIPTION = "message.command.price.description";
@@ -167,7 +177,6 @@ public final class Constants {
 				
 				private Headline () {
 					throw new IllegalStateException( STATE_WARNING );
-					
 				}
 				
 				public static final String SEPERATOR_COLOR = "message.command.headline.seperatorColor";
@@ -180,14 +189,12 @@ public final class Constants {
 				
 				private InfoBoard () {
 					throw new IllegalStateException( STATE_WARNING );
-					
 				}
 				
 				public final class Participants {
 					
 					private Participants () {
 						throw new IllegalStateException( STATE_WARNING );
-						
 					}
 					
 					public static final String TEXT = "message.command.infoBoard.participants.text";
@@ -199,7 +206,6 @@ public final class Constants {
 					
 					private Tickets () {
 						throw new IllegalStateException( STATE_WARNING );
-						
 					}
 					
 					public static final String TEXT = "message.command.infoBoard.tickets.text";
@@ -211,14 +217,15 @@ public final class Constants {
 					
 					private Timeleft () {
 						throw new IllegalStateException( STATE_WARNING );
-						
 					}
 					
 					public static final String TEXT = "message.command.infoBoard.timeleft.text";
 					public static final String VALUE = "message.command.infoBoard.timeleft.value";
 					
 				}
+				
 			}
+			
 		}
 	}
 }

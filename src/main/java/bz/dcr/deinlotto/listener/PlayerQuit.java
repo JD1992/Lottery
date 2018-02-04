@@ -6,19 +6,27 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
+
 /**
- * Created by Jan on 22.01.2017
+ * Handling if a player leaves the server and is a participant in the lotto
+ *
+ * @author Jan Dietze
+ * @version 1.0
  */
+
 public class PlayerQuit implements Listener {
 	
 	private final DeinLotto plugin;
 	
 	public PlayerQuit ( DeinLotto instance ) {
+		
 		this.plugin = instance;
+	
 	}
 	
 	@EventHandler
 	public void onPlayerQuit ( PlayerQuitEvent event ) {
+		
 		Player player = event.getPlayer();
 		if ( this.plugin.isInRound()
 		     && this.plugin.getParticipations().containsKey( player ) ) {

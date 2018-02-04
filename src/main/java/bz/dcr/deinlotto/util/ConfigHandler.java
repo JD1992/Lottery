@@ -3,17 +3,20 @@ package bz.dcr.deinlotto.util;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+
 /**
  * Handler for the plugin config
  *
  * @author Jan Dietze
  * @version 1.0
  */
+
 public class ConfigHandler {
 	
 	private final FileConfiguration config;
 	
 	public ConfigHandler ( JavaPlugin plugin ) {
+		
 		this.config = plugin.getConfig();
 		setDefaultPermissions();
 		setDefaultValues();
@@ -21,6 +24,7 @@ public class ConfigHandler {
 		
 		this.config.options().copyDefaults( true );
 		plugin.saveConfig();
+		
 	}
 	
 	/**
@@ -59,7 +63,6 @@ public class ConfigHandler {
 	 * Setting the default values for messages in the config
 	 */
 	private void setDefaultMessages () {
-		
 		
 		this.config.addDefault( Constants.Message.Error.SHUTDOWN, "Es ist ein fehler aufgetretten, das Plugin wurde zur Sicherheit deaktiviert." );
 		this.config.addDefault( Constants.Message.Error.GENERAL,
@@ -104,7 +107,6 @@ public class ConfigHandler {
 		
 		this.config.addDefault( Constants.Message.Command.InfoBoard.Timeleft.TEXT, "&eVerbleibende Zeit" );
 		this.config.addDefault( Constants.Message.Command.InfoBoard.Timeleft.VALUE, "&f" );
-		
 		
 	}
 	

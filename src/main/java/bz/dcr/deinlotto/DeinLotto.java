@@ -16,6 +16,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
 
+/**
+ * The main class of this lotto plugin. Players can buy tickets to participate and win the price.
+ *
+ * @author Jan Dietze
+ * @version 1.0
+ */
+
 public final class DeinLotto extends JavaPlugin {
 	
 	private @Getter Economy econ = null;
@@ -29,15 +36,12 @@ public final class DeinLotto extends JavaPlugin {
 	
 	@Override
 	public void onEnable () {
-		
 		init();
-		
 	}
 	
-	@Override
-	public void onDisable () {
-	}
-	
+	/**
+	 * Init everything that is important for the plugin
+	 */
 	private void init () {
 		
 		messageHandler = new MessageHandler( this );
@@ -52,6 +56,9 @@ public final class DeinLotto extends JavaPlugin {
 		
 	}
 	
+	/**
+	 * Check if Vault plugin is there and setup to use it
+	 */
 	private void setupEconomy () {
 		
 		if ( getServer().getPluginManager().getPlugin( "Vault" ) == null
@@ -65,16 +72,18 @@ public final class DeinLotto extends JavaPlugin {
 		
 	}
 	
+	/**
+	 * Init the commands for the plugin
+	 */
 	private void initCommands () {
-		
 		this.getCommand( "dia" ).setExecutor( new CommandDeinLotto( this ) );
-		
 	}
 	
+	/**
+	 * Init the listeners for the plugin
+	 */
 	private void initListener () {
-		
 		this.getServer().getPluginManager().registerEvents( new PlayerQuit( this ), this );
-		
 	}
 	
 	/**
@@ -83,11 +92,9 @@ public final class DeinLotto extends JavaPlugin {
 	 * @param sender The CommandSender which executed the reload
 	 */
 	public void reload ( CommandSender sender ) {
-		
 		this.getMessageHandler().sendConfigMessage( sender, Constants.Message.Reload.START );
 		this.reloadConfig();
 		this.getMessageHandler().sendConfigMessage( sender, Constants.Message.Reload.END );
-		
 	}
 	
 }
