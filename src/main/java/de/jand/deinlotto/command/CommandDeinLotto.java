@@ -1,7 +1,7 @@
-package bz.dcr.deinlotto.command;
+package de.jand.deinlotto.command;
 
-import bz.dcr.deinlotto.DeinLotto;
-import bz.dcr.deinlotto.util.Constants;
+import de.jand.deinlotto.DeinLotto;
+import de.jand.deinlotto.util.Constants;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

@@ -1,4 +1,4 @@
-package bz.dcr.deinlotto.util;
+package de.jand.deinlotto.util;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;

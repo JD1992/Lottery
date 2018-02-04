@@ -1,7 +1,7 @@
-package bz.dcr.deinlotto.listener;
+package de.jand.deinlotto.listener;
 
-import bz.dcr.deinlotto.DeinLotto;
-import bz.dcr.deinlotto.util.Constants;
+import de.jand.deinlotto.DeinLotto;
+import de.jand.deinlotto.util.Constants;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

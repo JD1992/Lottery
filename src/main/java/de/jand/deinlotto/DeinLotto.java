@@ -1,11 +1,11 @@
-package bz.dcr.deinlotto;
+package de.jand.deinlotto;
 
-import bz.dcr.deinlotto.command.CommandDeinLotto;
-import bz.dcr.deinlotto.listener.PlayerQuit;
-import bz.dcr.deinlotto.util.ConfigHandler;
-import bz.dcr.deinlotto.util.Constants;
-import bz.dcr.deinlotto.util.Countdown;
-import bz.dcr.deinlotto.util.MessageHandler;
+import de.jand.deinlotto.command.CommandDeinLotto;
+import de.jand.deinlotto.listener.PlayerQuit;
+import de.jand.deinlotto.util.ConfigHandler;
+import de.jand.deinlotto.util.Constants;
+import de.jand.deinlotto.util.Countdown;
+import de.jand.deinlotto.util.MessageHandler;
 import lombok.Getter;
 import lombok.Setter;
 import net.milkbowl.vault.economy.Economy;

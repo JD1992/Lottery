@@ -1,6 +1,6 @@
-package bz.dcr.deinlotto.util;
+package de.jand.deinlotto.util;
 
-import bz.dcr.deinlotto.DeinLotto;
+import de.jand.deinlotto.DeinLotto;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;

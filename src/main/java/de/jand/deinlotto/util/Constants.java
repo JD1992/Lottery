@@ -1,4 +1,4 @@
-package bz.dcr.deinlotto.util;
+package de.jand.deinlotto.util;
 
 /**
  * This class contains every constant value, config nodes and permissions
