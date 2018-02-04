@@ -17,61 +17,59 @@ public class CommandDeinLotto implements CommandExecutor {
 	
 	private final DeinLotto plugin;
 	
-	private final String SEPERATION;
-	private final String PARTICIPANTS;
-	private final String TICKETS;
-	private final String TIMELEFT;
-	private final String COMMAND;
-	private final String COST;
+	private final String seperation;
+	private final String participants;
+	private final String tickets;
+	private final String timeleft;
+	private final String command;
+	private final String cost;
 	
 	
 	public CommandDeinLotto ( DeinLotto plugin ) {
 		this.plugin = plugin;
 		
-		this.SEPERATION = getSeperation();
-		this.PARTICIPANTS = getParticipants();
-		this.TICKETS = getTickets();
-		this.TIMELEFT = getTimeLeft();
-		this.COMMAND = getCommand();
-		this.COST = getCost();
+		this.seperation = getSeperation();
+		this.participants = getParticipants();
+		this.tickets = getTickets();
+		this.timeleft = getTimeLeft();
+		this.command = getCommand();
+		this.cost = getCost();
 	}
 	
 	private String getCost () {
-		return this.plugin.getConfigHandler().getConfigString( Constants.Message.Command.Price.DESCRIPTION ) + ": " +
-		       this.plugin.getConfigHandler().getConfigString(Constants.Message.Command.Price.TEXT ) + " " +
-		       this.plugin.getConfigHandler().getConfigString(Constants.Plugin.Participations.COST ) + " " +
-		       this.plugin.getConfigHandler().getConfigString(Constants.Plugin.Participations.CURRENCY );
+		return this.plugin.getConfigHandler().getConfigString( Constants.Message.Command.Price.DESCRIPTION )
+		       + ": " + this.plugin.getConfigHandler().getConfigString( Constants.Message.Command.Price.TEXT )
+		       + " " + this.plugin.getConfigHandler().getConfigString( Constants.Plugin.Participations.COST )
+		       + " " + this.plugin.getConfigHandler().getConfigString( Constants.Plugin.Participations.CURRENCY );
 		
 	}
 	
 	private String getCommand () {
-		return this.plugin.getConfigHandler().getConfigString(Constants.Message.Command.Join.DESCRIPTION ) + ": " +
-		       this.plugin.getConfigHandler().getConfigString(Constants.Message.Command.Join.TEXT );
+		return this.plugin.getConfigHandler().getConfigString( Constants.Message.Command.Join.DESCRIPTION )
+		       + ": " + this.plugin.getConfigHandler().getConfigString( Constants.Message.Command.Join.TEXT );
 	}
 	
 	private String getTimeLeft () {
-		return this.plugin.getConfigHandler().getConfigString(Constants.Message.Command.InfoBoard.Timeleft.TEXT ) + ": " +
-		       this.plugin.getConfigHandler().getConfigString(Constants.Message.Command.InfoBoard.Timeleft.VALUE );
+		return this.plugin.getConfigHandler().getConfigString( Constants.Message.Command.InfoBoard.Timeleft.TEXT )
+		       + ": " + this.plugin.getConfigHandler().getConfigString( Constants.Message.Command.InfoBoard.Timeleft.VALUE );
 	}
 	
 	private String getTickets () {
-		return this.plugin.getConfigHandler().getConfigString(Constants.Message.Command.InfoBoard.Tickets.TEXT ) + ": " +
-		       this.plugin.getConfigHandler().getConfigString(Constants.Message.Command.InfoBoard.Tickets.VALUE );
+		return this.plugin.getConfigHandler().getConfigString( Constants.Message.Command.InfoBoard.Tickets.TEXT )
+		       + ": " + this.plugin.getConfigHandler().getConfigString( Constants.Message.Command.InfoBoard.Tickets.VALUE );
 	}
 	
 	private String getParticipants () {
-		return this.plugin.getConfigHandler().getConfigString(Constants.Message.Command.InfoBoard.Participants.TEXT ) + ": " +
-		       this.plugin.getConfigHandler().getConfigString(Constants.Message.Command.InfoBoard.Participants.VALUE );
+		return this.plugin.getConfigHandler().getConfigString( Constants.Message.Command.InfoBoard.Participants.TEXT )
+		       + ": " + this.plugin.getConfigHandler().getConfigString( Constants.Message.Command.InfoBoard.Participants.VALUE );
 	}
 	
 	private String getSeperation () {
-		String value = "";
-		value += this.plugin.getConfigHandler().getConfigString(Constants.Message.Command.Headline.SEPERATOR_COLOR );
-		value += this.plugin.getConfigHandler().getConfigString(Constants.Message.Command.Headline.SEPERATOR_SIGN );
-		value += " " + this.plugin.getConfigHandler().getConfigString(Constants.Message.Command.Headline.NAME ) + " ";
-		value += this.plugin.getConfigHandler().getConfigString(Constants.Message.Command.Headline.SEPERATOR_COLOR );
-		value += this.plugin.getConfigHandler().getConfigString(Constants.Message.Command.Headline.SEPERATOR_SIGN );
-		return value;
+		return this.plugin.getConfigHandler().getConfigString( Constants.Message.Command.Headline.SEPERATOR_COLOR )
+		       + this.plugin.getConfigHandler().getConfigString( Constants.Message.Command.Headline.SEPERATOR_SIGN )
+		       + this.plugin.getConfigHandler().getConfigString( Constants.Message.Command.Headline.NAME )
+		       + " " + this.plugin.getConfigHandler().getConfigString( Constants.Message.Command.Headline.SEPERATOR_COLOR )
+		       + this.plugin.getConfigHandler().getConfigString( Constants.Message.Command.Headline.SEPERATOR_SIGN );
 	}
 	
 	@Override
@@ -90,16 +88,18 @@ public class CommandDeinLotto implements CommandExecutor {
 		switch ( args.length ) {
 			case 0:
 				sendInfoBoard( player );
-				return true;
+				break;
 			case 1:
 				if ( ! ( args[ 0 ].equalsIgnoreCase( "join" ) ) ) {
 					sendInfoBoard( player );
-					return true;
+				} else {
+					buyTicket( player );
 				}
-				buyTicket( player );
-				return true;
+				break;
+			default:
+				sendInfoBoard( player );
 		}
-		return false;
+		return true;
 	}
 	
 	private void buyTicket ( Player player ) {
@@ -126,17 +126,17 @@ public class CommandDeinLotto implements CommandExecutor {
 	private void sendInfoBoard ( Player player ) {
 		ArrayList < String > messages = new ArrayList <>();
 		messages.add( " " );
-		messages.add( translateColors( SEPERATION ) );
-		messages.add( translateColors( PARTICIPANTS + this.plugin.getParticipations().size() ) );
-		messages.add( translateColors( TICKETS + getTicketsCount() ) );
+		messages.add( translateColors( seperation ) );
+		messages.add( translateColors( participants + this.plugin.getParticipations().size() ) );
+		messages.add( translateColors( tickets + getTicketsCount() ) );
 		if ( this.plugin.getCountdown().getCounter() >= 60 ) {
-			messages.add( translateColors( TIMELEFT + "mehr als " + ( this.plugin.getCountdown().getCounter() / 60 ) + " Minuten" ) );
+			messages.add( translateColors( timeleft + "mehr als " + ( this.plugin.getCountdown().getCounter() / 60 ) + " Minuten" ) );
 		} else {
-			messages.add( translateColors( TIMELEFT + "weniger als 1 Minute" ) );
+			messages.add( translateColors( timeleft + "weniger als 1 Minute" ) );
 		}
-		messages.add( translateColors( COMMAND ) );
-		messages.add( translateColors( COST ) );
-		messages.add( translateColors( SEPERATION ) );
+		messages.add( translateColors( command ) );
+		messages.add( translateColors( cost ) );
+		messages.add( translateColors( seperation ) );
 		messages.add( " " );
 		player.sendMessage( messages.toArray( new String[ 0 ] ) );
 	}

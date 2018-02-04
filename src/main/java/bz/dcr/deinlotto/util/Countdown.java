@@ -1,6 +1,8 @@
 package bz.dcr.deinlotto.util;
 
 import bz.dcr.deinlotto.DeinLotto;
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -17,25 +19,21 @@ public class Countdown implements Runnable {
 	
 	private final DeinLotto plugin;
 	
-	private int counter;
+	private @Getter @Setter int counter;
 	
 	private String timeleft;
 	
-	public Countdown ( DeinLotto plugin, int period ) {
+	public Countdown ( DeinLotto plugin ) {
 		this.plugin = plugin;
-		this.counter = period * 60;
-		
-		this.timeleft = plugin.getConfigHandler().getConfigString( Constants.Message.Broadcast.TEXT ) + ": " +
-		                plugin.getConfigHandler().getConfigString( Constants.Message.Broadcast.VALUE );
-		
-		this.plugin.setInRound( true );
-		this.run();
+		this.timeleft = plugin.getConfigHandler().getConfigString( Constants.Message.Broadcast.TEXT )
+		                + ": " + plugin.getConfigHandler().getConfigString( Constants.Message.Broadcast.VALUE );
+		this.start();
 	}
 	
 	@Override
 	public void run () {
 		if ( ! this.plugin.isInRound() ) { return; }
-		if ( counter == this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.TimingInMinutes.ROUNDS ) * 60 ) {
+		if ( this.counter == this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.TimingInMinutes.ROUNDS ) * 60 ) {
 			this.plugin.getMessageHandler().sendConfigMessage( Constants.Message.Round.START );
 		}
 		if ( counter >= 60 ) {
@@ -49,9 +47,10 @@ public class Countdown implements Runnable {
 				case 1800:
 					this.plugin.getMessageHandler().sendPluginMessage( timeleft + ( counter / 60 ) + " Minute(n)" );
 					break;
+				default:
 			}
 			counter--;
-			Bukkit.getScheduler().runTaskLater( this.plugin, this, 20 );
+			Bukkit.getScheduler().runTaskLater( this.plugin, this, 20L * 60L );
 			return;
 		}
 		
@@ -63,33 +62,35 @@ public class Countdown implements Runnable {
 				case 30:
 					this.plugin.getMessageHandler().sendPluginMessage( timeleft + ( counter ) + " Sekunde(n)" );
 					break;
+				default:
 			}
 			counter--;
-			Bukkit.getScheduler().runTaskLater( this.plugin, this, 20 );
+			Bukkit.getScheduler().runTaskLater( this.plugin, this, 20L );
 			return;
 		}
 		
+		this.plugin.setInRound( false );
 		if ( this.plugin.getParticipations().size() >= this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.Participations.MINIMUM_PLAYERS_PER_ROUND ) ) {
 			Random rnd = new Random();
 			ArrayList < Player > possibleWinners = new ArrayList <>();
 			for ( Map.Entry < Player, Integer > entry : this.plugin.getParticipations().entrySet() ) {
 				Player player = entry.getKey();
 				int entries = entry.getValue();
-				while ( entries >= 0 ) {
+				while ( entries > 0 ) {
 					possibleWinners.add( player );
 					entries--;
 				}
 			}
-			Player winner = possibleWinners.get( rnd.nextInt( possibleWinners.size() - 1 ) );
+			Player winner = possibleWinners.get( rnd.nextInt( possibleWinners.size() ) );
 			Bukkit.getScheduler().runTaskLater( this.plugin, () -> {
 				Material material = Material.getMaterial( this.plugin.getConfigHandler().getConfigString( Constants.Plugin.Price.MATERIAL ) );
 				ItemStack winnerItem = new ItemStack( material, this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.Price.COUNT ) );
 				winner.getInventory().addItem( winnerItem );
 				this.plugin.getMessageHandler().sendConfigMessage( winner, Constants.Message.Participations.WINNER );
-				this.plugin.getMessageHandler().sendPluginMessage( this.plugin.getConfigHandler().getConfigString( Constants.Message.Round.END_TEXT ) + " " +
-				                                                   this.plugin.getConfigHandler().getConfigString( Constants.Message.Round.END_COLOR ) +
-				                                                   winner.getName() );
-			}, 20 * 3L );
+				this.plugin.getMessageHandler().sendPluginMessage( this.plugin.getConfigHandler().getConfigString( Constants.Message.Round.END_TEXT )
+				                                                   + " " + this.plugin.getConfigHandler().getConfigString( Constants.Message.Round.END_COLOR )
+				                                                   + winner.getName() );
+			}, 20L * 3L );
 		} else {
 			this.plugin.getMessageHandler().sendConfigMessage( Constants.Message.Error.NO_PARTICIPANTS );
 			int entryMoney = this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.Participations.COST );
@@ -99,20 +100,19 @@ public class Countdown implements Runnable {
 				this.plugin.getEcon().depositPlayer( player, "Rückzahlung deinLotto", ( entries * entryMoney ) );
 			}
 		}
-		this.plugin.setInRound( false );
 		this.plugin.getParticipations().clear();
 		
-		Bukkit.getScheduler().runTaskLater( this.plugin, () -> {
-			this.plugin.setInRound( true );
-			this.plugin.setParticipations( new HashMap <>() );
-			this.counter = this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.TimingInMinutes.ROUNDS ) * 60;
-			this.run();
-		}, 20 * this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.TimingInMinutes.BETWEEN_ROUNDS ) * 60 );
+		Bukkit.getScheduler().runTaskLater( this.plugin, () -> { this.start(); },
+				20L * this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.TimingInMinutes.BETWEEN_ROUNDS ) * 60L );
 		
 	}
 	
-	public int getCounter () {
-		return counter;
+	private void start () {
+		this.counter = this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.TimingInMinutes.ROUNDS ) * 60;
+		this.plugin.setParticipations( new HashMap <>() );
+		
+		this.plugin.setInRound( true );
+		this.run();
 	}
 	
 }

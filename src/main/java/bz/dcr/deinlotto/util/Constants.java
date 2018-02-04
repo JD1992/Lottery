@@ -75,6 +75,7 @@ public final class Constants {
 				throw new IllegalStateException( STATE_WARNING );
 			}
 			
+			public static final String SHUTDOWN = "message.error.shutdown";
 			public static final String GENERAL = "message.error.general";
 			public static final String NO_CONSOLE = "message.error.noConsole";
 			public static final String NO_PERMISSION = "message.error.noPermission";

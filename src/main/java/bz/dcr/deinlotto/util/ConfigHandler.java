@@ -61,6 +61,7 @@ public class ConfigHandler {
 	private void setDefaultMessages () {
 		
 		
+		this.config.addDefault( Constants.Message.Error.SHUTDOWN, "Es ist ein fehler aufgetretten, das Plugin wurde zur Sicherheit deaktiviert." );
 		this.config.addDefault( Constants.Message.Error.GENERAL,
 				"&4Es ist ein Fehler aufgetretten, versuche es in Kürze erneut. Sollte es wieder nicht funktionieren, melde es dem Team." );
 		this.config.addDefault( Constants.Message.Error.NO_CONSOLE, "Dieser befehl steht nur Ingame zur Verfügung." );

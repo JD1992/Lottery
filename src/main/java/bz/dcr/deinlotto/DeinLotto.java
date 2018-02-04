@@ -12,7 +12,6 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -30,7 +29,9 @@ public final class DeinLotto extends JavaPlugin {
 	
 	@Override
 	public void onEnable () {
+		
 		init();
+		
 	}
 	
 	@Override
@@ -43,29 +44,25 @@ public final class DeinLotto extends JavaPlugin {
 		configHandler = new ConfigHandler( this );
 		
 		participations = new HashMap <>();
-		if ( ! setupEconomy() ) {
-			this.getMessageHandler().log( this.getConfigHandler().getFormattedConfigValue( Constants.Message.Error.NO_ECONOMY ) );
-			this.onDisable();
-		}
+		setupEconomy();
 		initCommands();
 		initListener();
-		Bukkit.getScheduler().runTaskLater( this,
-				() -> this.setCountdown( new Countdown( this, this.getConfigHandler().getConfigInt( Constants.Plugin.TimingInMinutes.ROUNDS ) ) ),
-				20 * this.getConfigHandler().getConfigInt( Constants.Plugin.TimingInMinutes.BETWEEN_ROUNDS ) * 60 );
+		Bukkit.getScheduler().runTaskLater( this, () -> this.setCountdown( new Countdown( this ) ),
+				20L * this.getConfigHandler().getConfigInt( Constants.Plugin.TimingInMinutes.BETWEEN_ROUNDS ) * 60L );
 		
 	}
 	
-	private boolean setupEconomy () {
+	private void setupEconomy () {
 		
-		if ( getServer().getPluginManager().getPlugin( "Vault" ) == null ) {
-			return false;
+		if ( getServer().getPluginManager().getPlugin( "Vault" ) == null
+		     || getServer().getServicesManager().getRegistration( Economy.class ) == null ) {
+			this.getMessageHandler().log( this.getConfigHandler().getFormattedConfigValue( Constants.Message.Error.NO_ECONOMY ) );
+			this.getMessageHandler().log( this.getConfigHandler().getFormattedConfigValue( Constants.Message.Error.SHUTDOWN ) );
+			this.getPluginLoader().disablePlugin( this );
+			return;
 		}
-		RegisteredServiceProvider < Economy > rsp = getServer().getServicesManager().getRegistration( Economy.class );
-		if ( rsp == null ) {
-			return false;
-		}
-		econ = rsp.getProvider();
-		return econ != null;
+		econ = getServer().getServicesManager().getRegistration( Economy.class ).getProvider();
+		
 	}
 	
 	private void initCommands () {
@@ -90,6 +87,7 @@ public final class DeinLotto extends JavaPlugin {
 		this.getMessageHandler().sendConfigMessage( sender, Constants.Message.Reload.START );
 		this.reloadConfig();
 		this.getMessageHandler().sendConfigMessage( sender, Constants.Message.Reload.END );
+		
 	}
 	
 }
