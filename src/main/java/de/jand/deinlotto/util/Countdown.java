@@ -52,14 +52,11 @@ public class Countdown implements Runnable {
 			Bukkit.getScheduler().runTaskLater( this.plugin, this, 20L * 60L );
 			return;
 		}
-	
+		
 		// Behavior if the counter is higher than 60 secounds
-		if ( counter >= 60 ) {
+		if ( counter > 60 ) {
 			// Send status messages with the time left in round at specified points
 			switch ( counter ) {
-				case 60:
-					this.plugin.getMessageHandler().sendPluginMessage( "1 Minute" );
-					break;
 				case 120:
 				case 300:
 				case 600:
@@ -81,6 +78,8 @@ public class Countdown implements Runnable {
 			// Send status messages with the time left in round at specified points
 			switch ( counter ) {
 				case 1:
+					this.plugin.getMessageHandler().sendPluginMessage( timeleft + "1 Sekunde" );
+					break;
 				case 2:
 				case 3:
 				case 4:
@@ -88,6 +87,9 @@ public class Countdown implements Runnable {
 				case 10:
 				case 30:
 					this.plugin.getMessageHandler().sendPluginMessage( timeleft + ( counter ) + " Sekunde(n)" );
+					break;
+				case 60:
+					this.plugin.getMessageHandler().sendPluginMessage( timeleft + "1 Minute" );
 					break;
 				default:
 			}
