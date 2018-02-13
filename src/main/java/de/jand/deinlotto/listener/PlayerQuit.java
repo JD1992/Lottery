@@ -28,10 +28,15 @@ public class PlayerQuit implements Listener {
 	public void onPlayerQuit ( PlayerQuitEvent event ) {
 		
 		Player player = event.getPlayer();
+		// If a lotto round is active and the player is participant than refund
 		if ( this.plugin.isInRound()
 		     && this.plugin.getParticipations().containsKey( player ) ) {
+			
+			// Get the participation cost and the entries for the player
 			int entryMoney = this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.Participation.COST );
 			int entries = this.plugin.getParticipations().get( player );
+			
+			// Refund the player and remove it from the participation list
 			this.plugin.getEcon().depositPlayer( player, "Rückzahlung deinLotto", ( entries * entryMoney ) );
 			this.plugin.getParticipations().remove( player );
 		}
