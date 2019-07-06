@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>de.jand</groupId>
-    <artifactId>deinLotto</artifactId>
+    <artifactId>Lottery</artifactId>
     <version>1.2</version>
     <packaging>jar</packaging>
 
-    <name>DeinLotto</name>
+    <name>Lottery</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
