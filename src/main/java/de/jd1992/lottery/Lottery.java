@@ -1,11 +1,11 @@
-package de.jand.deinlotto;
+package de.jd1992.lottery;
 
-import de.jand.deinlotto.command.CommandDeinLotto;
-import de.jand.deinlotto.listener.PlayerQuit;
-import de.jand.deinlotto.util.ConfigHandler;
-import de.jand.deinlotto.util.Constants;
-import de.jand.deinlotto.util.Countdown;
-import de.jand.deinlotto.util.MessageHandler;
+import de.jd1992.lottery.command.LotteryCommand;
+import de.jd1992.lottery.listener.PlayerQuit;
+import de.jd1992.lottery.util.ConfigHandler;
+import de.jd1992.lottery.util.Constants;
+import de.jd1992.lottery.util.Countdown;
+import de.jd1992.lottery.util.MessageHandler;
 import lombok.Getter;
 import lombok.Setter;
 import net.milkbowl.vault.economy.Economy;
@@ -23,7 +23,7 @@ import java.util.HashMap;
  * @version 1.0
  */
 
-public final class DeinLotto extends JavaPlugin {
+public final class Lottery extends JavaPlugin {
 	
 	private @Getter Economy econ = null;
 	
@@ -76,7 +76,7 @@ public final class DeinLotto extends JavaPlugin {
 	 * Init the commands for the plugin
 	 */
 	private void initCommands () {
-		this.getCommand( "dia" ).setExecutor( new CommandDeinLotto( this ) );
+		this.getCommand( "lottery" ).setExecutor( new LotteryCommand(this ));
 	}
 	
 	/**

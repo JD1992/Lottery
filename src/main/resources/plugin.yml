@@ -1,9 +1,9 @@
-name: deinLotto
+name: Lottery
 version: ${project.version}
-main: de.jand.deinlotto.DeinLotto
+main: Lottery
 author: JD1992
 depend: [Vault]
 commands:
   dia:
     description: Informationen über das Lotto
-    usage: /dia
+    usage: /lottery

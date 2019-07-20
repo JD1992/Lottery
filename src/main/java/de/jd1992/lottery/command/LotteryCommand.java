@@ -1,7 +1,7 @@
-package de.jand.deinlotto.command;
+package de.jd1992.lottery.command;
 
-import de.jand.deinlotto.DeinLotto;
-import de.jand.deinlotto.util.Constants;
+import de.jd1992.lottery.Lottery;
+import de.jd1992.lottery.util.Constants;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -18,9 +18,9 @@ import java.util.Map;
  * @version 1.0
  */
 
-public class CommandDeinLotto implements CommandExecutor {
+public class LotteryCommand implements CommandExecutor {
 	
-	private final DeinLotto plugin;
+	private final Lottery plugin;
 	
 	private final String seperation;
 	private final String participants;
@@ -30,7 +30,7 @@ public class CommandDeinLotto implements CommandExecutor {
 	private final String cost;
 	
 	
-	public CommandDeinLotto ( DeinLotto plugin ) {
+	public LotteryCommand (Lottery plugin) {
 		this.plugin = plugin;
 		
 		this.seperation = getSeperation();
@@ -47,7 +47,7 @@ public class CommandDeinLotto implements CommandExecutor {
 	 * @return Constructed string with the information
 	 */
 	private String getCost () {
-		return this.plugin.getConfigHandler().getConfigString( Constants.Message.Command.Price.DESCRIPTION )
+		return this.plugin.getConfigHandler().getConfigString(Constants.Message.Command.Price.DESCRIPTION)
 		       + ": " + this.plugin.getConfigHandler().getConfigString( Constants.Message.Command.Price.TEXT )
 		       + " " + this.plugin.getConfigHandler().getConfigString( Constants.Plugin.Participation.COST )
 		       + " " + this.plugin.getConfigHandler().getConfigString( Constants.Plugin.Participation.CURRENCY );
@@ -154,7 +154,8 @@ public class CommandDeinLotto implements CommandExecutor {
 			this.plugin.getMessageHandler().sendConfigMessage( player, Constants.Message.Error.NO_MONEY );
 			return;
 		}
-		this.plugin.getEcon().withdrawPlayer( player, "Ticket für deinLotto", this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.Participation.COST ) );
+		this.plugin.getEcon().withdrawPlayer( player, "Ticket für Lottery",
+                                              this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.Participation.COST ) );
 		
 		// Increase the participation count for the player
 		if ( this.plugin.getParticipations().containsKey( player ) ) {

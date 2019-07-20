@@ -1,4 +1,4 @@
-package de.jand.deinlotto.util;
+package de.jd1992.lottery.util;
 
 /**
  * This class contains every constant value, config nodes and permissions

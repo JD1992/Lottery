@@ -1,4 +1,4 @@
-package de.jand.deinlotto.util;
+package de.jd1992.lottery.util;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -32,8 +32,8 @@ public class ConfigHandler {
 	 */
 	private void setDefaultPermissions () {
 		
-		this.config.addDefault( Constants.Permission.ADMIN, "deinlotto.admin" );
-		this.config.addDefault( Constants.Permission.TEAM, "deinlotto.team" );
+		this.config.addDefault( Constants.Permission.ADMIN, "lottery.admin" );
+		this.config.addDefault( Constants.Permission.TEAM, "lottery.team" );
 		
 	}
 	
@@ -42,8 +42,8 @@ public class ConfigHandler {
 	 */
 	private void setDefaultValues () {
 		
-		this.config.addDefault( Constants.Plugin.Prefix.CONSOLE, "[deinLotto]" );
-		this.config.addDefault( Constants.Plugin.Prefix.INGAME, "&6&o&ldeinLotto&0>" );
+		this.config.addDefault( Constants.Plugin.Prefix.CONSOLE, "[Lottery]" );
+		this.config.addDefault( Constants.Plugin.Prefix.INGAME, "&6&o&lLottery&0>" );
 		
 		this.config.addDefault( Constants.Plugin.TimingInMinutes.ROUNDS, 30 );
 		this.config.addDefault( Constants.Plugin.TimingInMinutes.BETWEEN_ROUNDS, 10 );
@@ -71,34 +71,34 @@ public class ConfigHandler {
 		this.config.addDefault( Constants.Message.Error.NO_PERMISSION, "&eDieser Befehl existiert nicht." );
 		this.config.addDefault( Constants.Message.Error.NO_ECONOMY, "Vault konnte nicht initialisiert werden." );
 		this.config.addDefault( Constants.Message.Error.NO_MONEY, "&4Du hast nicht genügend Geld." );
-		this.config.addDefault( Constants.Message.Error.NO_PARTICIPANTS, "&4Es haben zu wenige Personen beim Dia-Lotto mitgemacht!" );
-		this.config.addDefault( Constants.Message.Error.NO_ACTIVE_ROUND, "&4Derzeit läuft keine Runde des Dia-Lotto." );
+		this.config.addDefault( Constants.Message.Error.NO_PARTICIPANTS, "&4Es haben zu wenige Personen beim Lotto mitgemacht!" );
+		this.config.addDefault( Constants.Message.Error.NO_ACTIVE_ROUND, "&4Derzeit läuft keine Runde des Lotto." );
 		this.config.addDefault( Constants.Message.Error.WRONG_PARAMETER, "&4Überprüfe deine Eingabe." );
 		
-		this.config.addDefault( Constants.Message.Round.START, "&eEine neue Runde Dia-Lotto ist gestartet." );
+		this.config.addDefault( Constants.Message.Round.START, "&eEine neue Runde Lotto ist gestartet." );
 		this.config.addDefault( Constants.Message.Round.END_TEXT, "&eEinen Diamant hat gewonnen" );
 		this.config.addDefault( Constants.Message.Round.END_COLOR, "&6" );
-		this.config.addDefault( Constants.Message.Round.DRAW, "&eDiese Runde des Dia-Lotto wurde beendet, ein Gewinner wird gerade ermittelt." );
+		this.config.addDefault( Constants.Message.Round.DRAW, "&eDiese Runde des Lotto wurde beendet, ein Gewinner wird gerade ermittelt." );
 		
-		this.config.addDefault( Constants.Message.Participation.SUCCESS, "&eDu nimmst an dieser Runde des Dia-Lotto teil." );
-		this.config.addDefault( Constants.Message.Participation.WINNER, "&eDu hast beim Dia-Lotto gewonnen. Der Gewinn wurde in dein Inventar gelegt." );
+		this.config.addDefault( Constants.Message.Participation.SUCCESS, "&eDu nimmst an dieser Runde des Lotto teil." );
+		this.config.addDefault( Constants.Message.Participation.WINNER, "&eDu hast beim Lotto gewonnen. Der Gewinn wurde in dein Inventar gelegt." );
 		this.config.addDefault( Constants.Message.Participation.REACHED_MAX, "&eDu hast bereit die Maximale Menge an Tickets erreicht." );
 		
 		this.config.addDefault( Constants.Message.Reload.START, "&4Das Plugin wird neugeladen." );
 		this.config.addDefault( Constants.Message.Reload.END, "&4Das Plugin wurde erfolgreich neugeladen." );
 		
-		this.config.addDefault( Constants.Message.Broadcast.TEXT, "&3Diese Runde des Dia-Lotto endet in" );
+		this.config.addDefault( Constants.Message.Broadcast.TEXT, "&3Diese Runde des Lotto endet in" );
 		this.config.addDefault( Constants.Message.Broadcast.VALUE, "&f" );
 		
 		this.config.addDefault( Constants.Message.Command.Join.DESCRIPTION, "&3Teilnehmen kannst du mit" );
-		this.config.addDefault( Constants.Message.Command.Join.TEXT, "&e/dia join" );
+		this.config.addDefault( Constants.Message.Command.Join.TEXT, "&e/lottery join" );
 		
 		this.config.addDefault( Constants.Message.Command.Price.DESCRIPTION, "&3Eine Teilnahme kostet" );
 		this.config.addDefault( Constants.Message.Command.Price.TEXT, "&e" );
 		
 		this.config.addDefault( Constants.Message.Command.Headline.SEPERATOR_COLOR, "&9" );
 		this.config.addDefault( Constants.Message.Command.Headline.SEPERATOR_SIGN, "==========" );
-		this.config.addDefault( Constants.Message.Command.Headline.NAME, "&6[Dia-Lotto]" );
+		this.config.addDefault( Constants.Message.Command.Headline.NAME, "&6[Lottery]" );
 		
 		this.config.addDefault( Constants.Message.Command.InfoBoard.Participants.TEXT, "&eTeilnehmende Spieler" );
 		this.config.addDefault( Constants.Message.Command.InfoBoard.Participants.VALUE, "&f" );

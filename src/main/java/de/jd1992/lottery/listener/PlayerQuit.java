@@ -1,7 +1,7 @@
-package de.jand.deinlotto.listener;
+package de.jd1992.lottery.listener;
 
-import de.jand.deinlotto.DeinLotto;
-import de.jand.deinlotto.util.Constants;
+import de.jd1992.lottery.Lottery;
+import de.jd1992.lottery.util.Constants;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,9 +16,9 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerQuit implements Listener {
 	
-	private final DeinLotto plugin;
+	private final Lottery plugin;
 	
-	public PlayerQuit ( DeinLotto instance ) {
+	public PlayerQuit ( Lottery instance) {
 		
 		this.plugin = instance;
 	
@@ -33,11 +33,11 @@ public class PlayerQuit implements Listener {
 		     && this.plugin.getParticipations().containsKey( player ) ) {
 			
 			// Get the participation cost and the entries for the player
-			int entryMoney = this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.Participation.COST );
+			int entryMoney = this.plugin.getConfigHandler().getConfigInt(Constants.Plugin.Participation.COST);
 			int entries = this.plugin.getParticipations().get( player );
 			
 			// Refund the player and remove it from the participation list
-			this.plugin.getEcon().depositPlayer( player, "Rückzahlung deinLotto", ( entries * entryMoney ) );
+			this.plugin.getEcon().depositPlayer( player, "Rückzahlung Lottery", ( entries * entryMoney ) );
 			this.plugin.getParticipations().remove( player );
 		}
 	}

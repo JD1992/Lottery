@@ -1,4 +1,4 @@
-package de.jand.deinlotto.util;
+package de.jd1992.lottery.util;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

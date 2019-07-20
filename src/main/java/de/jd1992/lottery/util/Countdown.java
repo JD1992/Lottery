@@ -1,6 +1,6 @@
-package de.jand.deinlotto.util;
+package de.jd1992.lottery.util;
 
-import de.jand.deinlotto.DeinLotto;
+import de.jd1992.lottery.Lottery;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -22,13 +22,13 @@ import java.util.Random;
 
 public class Countdown implements Runnable {
 	
-	private final DeinLotto plugin;
+	private final Lottery plugin;
 	
 	private @Getter @Setter int counter;
 	
 	private String timeleft;
 	
-	public Countdown ( DeinLotto plugin ) {
+	public Countdown ( Lottery plugin) {
 		
 		this.plugin = plugin;
 		
@@ -142,7 +142,7 @@ public class Countdown implements Runnable {
 			for ( Map.Entry < Player, Integer > entry : this.plugin.getParticipations().entrySet() ) {
 				Player player = entry.getKey();
 				int entries = entry.getValue();
-				this.plugin.getEcon().depositPlayer( player, "Rückzahlung deinLotto", ( entries * entryMoney ) );
+				this.plugin.getEcon().depositPlayer( player, "Rückzahlung Lottery", ( entries * entryMoney ) );
 			}
 		}
 		
@@ -150,7 +150,7 @@ public class Countdown implements Runnable {
 		this.plugin.getParticipations().clear();
 		
 		// Start the countdown after a delay
-		Bukkit.getScheduler().runTaskLater( this.plugin, () -> this.start(),
+		Bukkit.getScheduler().runTaskLater(this.plugin, this :: start,
 				20L * this.plugin.getConfigHandler().getConfigInt( Constants.Plugin.TimingInMinutes.BETWEEN_ROUNDS ) * 60L );
 		
 	}
